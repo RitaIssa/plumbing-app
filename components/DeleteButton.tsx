@@ -23,7 +23,7 @@ const apiPathMap: Record<EntityType, string> = {
   account: "/api/accounts",
 };
 
-export default function DeleteButton({ id, entityType, entityName }: Props) {
+export default function DeleteButton({ id, entityType }: Props) {
   const [loading, setLoading] = useState(false);
   // Controls whether the confirmation modal is visible
   const [showModal, setShowModal] = useState(false);
