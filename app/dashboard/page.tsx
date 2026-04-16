@@ -25,7 +25,7 @@ export default async function DashboardPage() {
       {/* Page header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-slate-500 mt-1">Welcome back. Here's your business at a glance.</p>
+        <p className="text-slate-500 mt-1">Welcome back. Here&apos;s your business at a glance.</p>
       </div>
 
       {/* Summary stat cards */}
