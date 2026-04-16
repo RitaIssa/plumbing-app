@@ -6,7 +6,6 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
 
 type EntityType = "supplier" | "product" | "account";
 
@@ -27,7 +26,6 @@ export default function DeleteButton({ id, entityType }: Props) {
   const [loading, setLoading] = useState(false);
   // Controls whether the confirmation modal is visible
   const [showModal, setShowModal] = useState(false);
-  const router = useRouter();
 
   // Called when the user clicks the "Delete" button in the list
   function handleDeleteClick() {
@@ -55,8 +53,8 @@ export default function DeleteButton({ id, entityType }: Props) {
         return;
       }
 
-      // Refresh the page to show the updated list
-      router.refresh();
+      // Reload the page so the server re-fetches the latest data from the database
+      window.location.reload();
     } catch {
       alert("Network error. Please check your connection and try again.");
     } finally {
@@ -96,6 +94,7 @@ export default function DeleteButton({ id, entityType }: Props) {
 
                 {/* Confirm delete button — red */}
                 <button
+                  type="button"
                   onClick={handleConfirm}
                   className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors"
                 >
