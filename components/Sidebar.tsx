@@ -1,51 +1,99 @@
 "use client";
 
-// Sidebar navigation component.
-// It uses usePathname() to highlight the current active link — that's why it needs "use client".
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import {
+  LayoutDashboard,
+  Truck,
+  Package,
+  Users,
+  Wrench,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-// Each item in the nav has a label and a URL path
-const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: "📊" },
-  { label: "Suppliers", href: "/suppliers", icon: "🏭" },
-  { label: "Products", href: "/products", icon: "📦" },
-  { label: "Accounts", href: "/accounts", icon: "👥" },
+const navItems: { label: string; href: string; Icon: LucideIcon }[] = [
+  { label: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
+  { label: "Suppliers", href: "/suppliers", Icon: Truck },
+  { label: "Products", href: "/products", Icon: Package },
+  { label: "Accounts", href: "/accounts", Icon: Users },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <aside className="w-56 min-h-screen bg-slate-800 text-white flex flex-col">
-      {/* App title / logo area */}
-      <div className="px-6 py-5 border-b border-slate-700">
-        <h1 className="text-lg font-bold tracking-tight">
-          🔧 PlumbingPro
-        </h1>
-        <p className="text-xs text-slate-400 mt-0.5">Business Manager</p>
+    <aside
+      className={`${
+        collapsed ? "w-16" : "w-56"
+      } transition-all duration-300 ease-in-out shrink-0 min-h-screen bg-slate-800 text-white flex flex-col`}
+    >
+      {/* Header row — logo + title left, chevron right (expanded); icon centered (collapsed) */}
+      <div
+        className={`flex items-center border-b border-slate-700 px-3 py-4 ${
+          collapsed ? "justify-center" : "justify-between"
+        }`}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <Wrench className="w-5 h-5 text-blue-400 shrink-0" />
+          {!collapsed && (
+            <div>
+              <h1 className="text-sm font-bold tracking-tight">PlumbingPro</h1>
+              <p className="text-xs text-slate-400">Business Manager</p>
+            </div>
+          )}
+        </div>
+
+        {/* Chevron lives in the header row when expanded */}
+        {!collapsed && (
+          <button
+            onClick={() => setCollapsed(true)}
+            aria-label="Collapse sidebar"
+            className="p-1 rounded-md text-slate-400 hover:bg-slate-700 hover:text-white transition-colors shrink-0"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+        )}
       </div>
+
+      {/* Expand button shown just below the logo when collapsed */}
+      {collapsed && (
+        <button
+          onClick={() => setCollapsed(false)}
+          aria-label="Expand sidebar"
+          className="flex justify-center py-2 border-b border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      )}
 
       {/* Navigation links */}
       <nav className="flex-1 py-4">
-        <ul className="space-y-1 px-3">
-          {navItems.map((item) => {
-            // Highlight the link if the current URL starts with the link's href
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+        <ul className="space-y-1 px-2">
+          {navItems.map(({ label, href, Icon }) => {
+            const isActive =
+              pathname === href || pathname.startsWith(href + "/");
 
             return (
-              <li key={item.href}>
+              <li key={href}>
                 <Link
-                  href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  href={href}
+                  title={collapsed ? label : undefined}
+                  className={`flex items-center py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    collapsed ? "justify-center px-2" : "gap-3 px-3"
+                  } ${
                     isActive
                       ? "bg-blue-600 text-white"
                       : "text-slate-300 hover:bg-slate-700 hover:text-white"
                   }`}
                 >
-                  <span>{item.icon}</span>
-                  {item.label}
+                  <Icon className="w-5 h-5 shrink-0" />
+                  {!collapsed && (
+                    <span className="whitespace-nowrap">{label}</span>
+                  )}
                 </Link>
               </li>
             );
@@ -53,9 +101,13 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer area */}
-      <div className="px-6 py-4 border-t border-slate-700">
-        <p className="text-xs text-slate-500">Plumbing Supplies Co.</p>
+      {/* Footer */}
+      <div className="px-3 py-4 border-t border-slate-700">
+        {!collapsed && (
+          <p className="text-xs text-slate-500 whitespace-nowrap">
+            Plumbing Supplies Co.
+          </p>
+        )}
       </div>
     </aside>
   );

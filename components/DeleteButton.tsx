@@ -1,10 +1,11 @@
 "use client";
 
 // DeleteButton — a client component because it needs onClick interactivity.
-// It shows a confirm dialog, then calls the relevant API route to delete the record.
-// After deletion, it reloads the page so the list updates.
+// The confirmation modal is rendered via createPortal directly on document.body,
+// which guarantees it's never clipped or blocked by any ancestor's overflow/z-index.
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 
 type EntityType = "supplier" | "product" | "account";
@@ -24,15 +25,23 @@ const apiPathMap: Record<EntityType, string> = {
 
 export default function DeleteButton({ id, entityType, entityName }: Props) {
   const [loading, setLoading] = useState(false);
+  // Controls whether the confirmation modal is visible
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
-  async function handleDelete() {
-    // Ask the user to confirm before deleting
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${entityName}"? This cannot be undone.`
-    );
-    if (!confirmed) return;
+  // Called when the user clicks the "Delete" button in the list
+  function handleDeleteClick() {
+    setShowModal(true);
+  }
 
+  // Called when the user clicks "Cancel" in the modal
+  function handleCancel() {
+    setShowModal(false);
+  }
+
+  // Called when the user clicks the red "Delete" button in the modal
+  async function handleConfirm() {
+    setShowModal(false);
     setLoading(true);
 
     try {
@@ -56,12 +65,47 @@ export default function DeleteButton({ id, entityType, entityName }: Props) {
   }
 
   return (
-    <button
-      onClick={handleDelete}
-      disabled={loading}
-      className="text-red-500 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {loading ? "Deleting…" : "Delete"}
-    </button>
+    <>
+      {/* Delete trigger button in the list row */}
+      <button
+        onClick={handleDeleteClick}
+        disabled={loading}
+        className="text-red-500 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? "Deleting…" : "Delete"}
+      </button>
+
+      {/* Modal rendered via portal directly on document.body —
+          this ensures it's never blocked by overflow:hidden or any stacking context */}
+      {showModal &&
+        createPortal(
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
+              <p className="text-gray-800 text-base mb-6">
+                Are you sure you want to delete this? This action cannot be undone.
+              </p>
+
+              <div className="flex justify-end gap-3">
+                {/* Cancel button — grey */}
+                <button
+                  onClick={handleCancel}
+                  className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+                >
+                  Cancel
+                </button>
+
+                {/* Confirm delete button — red */}
+                <button
+                  onClick={handleConfirm}
+                  className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+    </>
   );
 }

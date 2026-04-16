@@ -3,6 +3,7 @@
 
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { Truck, Package, Users } from "lucide-react";
 
 export default async function DashboardPage() {
   // Fetch counts and recent records from the database in parallel
@@ -32,22 +33,22 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
         <StatCard
           title="Total Suppliers"
+          icon={<Truck className="w-8 h-8" />}
           count={supplierCount}
-          icon="🏭"
           href="/suppliers"
           color="blue"
         />
         <StatCard
           title="Total Products"
+          icon={<Package className="w-8 h-8" />}
           count={productCount}
-          icon="📦"
           href="/products"
           color="green"
         />
         <StatCard
           title="Total Accounts"
+          icon={<Users className="w-8 h-8" />}
           count={accountCount}
-          icon="👥"
           href="/accounts"
           color="purple"
         />
@@ -131,7 +132,7 @@ function StatCard({
 }: {
   title: string;
   count: number;
-  icon: string;
+  icon: React.ReactNode;
   href: string;
   color: "blue" | "green" | "purple";
 }) {
@@ -144,7 +145,7 @@ function StatCard({
   return (
     <Link href={href} className="block">
       <div className={`rounded-xl border p-6 hover:shadow-md transition-shadow ${colorMap[color]}`}>
-        <div className="text-3xl mb-3">{icon}</div>
+        <div className="mb-3">{icon}</div>
         <div className="text-3xl font-bold">{count}</div>
         <div className="text-sm font-medium mt-1 opacity-80">{title}</div>
       </div>

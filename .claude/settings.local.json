@@ -2,7 +2,19 @@
   "permissions": {
     "allow": [
       "Bash(npx eslint *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(node -e \"const m = require\\('./node_modules/lucide-react/dist/cjs/lucide-react.js'\\); console.log\\(typeof m.LayoutDashboard, typeof m.Truck\\);\")",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/lucide-react/package.json'\\).version\\)\")",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:3001/suppliers)",
+      "Bash(curl -s http://localhost:3001/dashboard)",
+      "Bash(curl -s http://localhost:3001/_next/static/chunks/app/layout.js)",
+      "Bash(curl -s http://localhost:3001/_next/static/chunks/app/suppliers/page.js)",
+      "Bash(curl -sI http://localhost:3001/_next/static/chunks/app/layout.js)",
+      "Bash(node -e \"const code=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); try { new Function\\(code\\); console.log\\('JS syntax OK'\\); } catch\\(e\\) { console.log\\('JS SYNTAX ERROR:', e.message\\); }\")",
+      "Bash(curl -s \"http://localhost:3001/_next/static/css/app/layout.css?v=1776349449702\")",
+      "Bash(curl -s http://localhost:3000/_next/static/chunks/app/layout.js)",
+      "Bash(powershell *)"
     ]
   }
 }
