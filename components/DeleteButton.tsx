@@ -22,7 +22,7 @@ const apiPathMap: Record<EntityType, string> = {
   account: "/api/accounts",
 };
 
-export default function DeleteButton({ id, entityType }: Props) {
+export default function DeleteButton({ id, entityType, entityName }: Props) {
   const [loading, setLoading] = useState(false);
   // Controls whether the confirmation modal is visible
   const [showModal, setShowModal] = useState(false);
@@ -80,7 +80,7 @@ export default function DeleteButton({ id, entityType }: Props) {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
             <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
               <p className="text-gray-800 text-base mb-6">
-                Are you sure you want to delete this? This action cannot be undone.
+                Are you sure you want to delete <strong>{entityName}</strong>? This action cannot be undone.
               </p>
 
               <div className="flex justify-end gap-3">

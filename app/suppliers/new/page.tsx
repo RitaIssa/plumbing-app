@@ -3,7 +3,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import SubmitButton from "@/components/SubmitButton";
 
 // This server action runs on the server when the form is submitted
 async function createSupplier(formData: FormData) {
@@ -28,7 +30,8 @@ async function createSupplier(formData: FormData) {
     },
   });
 
-  // After saving, go back to the suppliers list
+  revalidatePath("/suppliers");
+  revalidatePath("/dashboard");
   redirect("/suppliers");
 }
 
@@ -103,12 +106,7 @@ export default function NewSupplierPage() {
 
         {/* Submit button */}
         <div className="flex items-center gap-3 pt-2">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-          >
-            Save Supplier
-          </button>
+          <SubmitButton label="Save Supplier" loadingLabel="Saving…" />
           <Link href="/suppliers" className="text-sm text-slate-500 hover:text-slate-700">
             Cancel
           </Link>

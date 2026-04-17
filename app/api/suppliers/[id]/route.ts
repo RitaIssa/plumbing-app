@@ -3,6 +3,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function DELETE(
   _req: NextRequest,
@@ -17,6 +18,9 @@ export async function DELETE(
   try {
     // Deleting a supplier also deletes its products (cascade is set in the schema)
     await prisma.supplier.delete({ where: { id } });
+    revalidatePath("/suppliers");
+    revalidatePath("/products");
+    revalidatePath("/dashboard");
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(

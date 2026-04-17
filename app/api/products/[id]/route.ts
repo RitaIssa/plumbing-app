@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function DELETE(
   _req: NextRequest,
@@ -15,6 +16,8 @@ export async function DELETE(
 
   try {
     await prisma.product.delete({ where: { id } });
+    revalidatePath("/products");
+    revalidatePath("/dashboard");
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(

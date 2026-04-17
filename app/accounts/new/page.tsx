@@ -2,7 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import SubmitButton from "@/components/SubmitButton";
 
 async function createAccount(formData: FormData) {
   "use server";
@@ -25,6 +27,8 @@ async function createAccount(formData: FormData) {
     },
   });
 
+  revalidatePath("/accounts");
+  revalidatePath("/dashboard");
   redirect("/accounts");
 }
 
@@ -118,12 +122,7 @@ export default function NewAccountPage() {
 
         {/* Buttons */}
         <div className="flex items-center gap-3 pt-2">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-          >
-            Save Account
-          </button>
+          <SubmitButton label="Save Account" loadingLabel="Saving…" />
           <Link href="/accounts" className="text-sm text-slate-500 hover:text-slate-700">
             Cancel
           </Link>

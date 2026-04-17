@@ -2,7 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import SubmitButton from "@/components/SubmitButton";
 
 async function createProduct(formData: FormData) {
   "use server";
@@ -33,6 +35,8 @@ async function createProduct(formData: FormData) {
     },
   });
 
+  revalidatePath("/products");
+  revalidatePath("/dashboard");
   redirect("/products");
 }
 
@@ -190,13 +194,7 @@ export default async function NewProductPage() {
 
         {/* Buttons */}
         <div className="flex items-center gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={suppliers.length === 0}
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Save Product
-          </button>
+          <SubmitButton label="Save Product" loadingLabel="Saving…" disabled={suppliers.length === 0} />
           <Link href="/products" className="text-sm text-slate-500 hover:text-slate-700">
             Cancel
           </Link>
