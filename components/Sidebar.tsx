@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   LayoutDashboard,
@@ -11,8 +11,10 @@ import {
   Wrench,
   ChevronLeft,
   ChevronRight,
+  LogOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 const navItems: { label: string; href: string; Icon: LucideIcon }[] = [
   { label: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
@@ -23,7 +25,15 @@ const navItems: { label: string; href: string; Icon: LucideIcon }[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
 
   return (
     <aside
@@ -101,13 +111,23 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer */}
-      <div className="px-3 py-4 border-t border-slate-700">
+      {/* Footer — company name + logout */}
+      <div className="px-3 py-4 border-t border-slate-700 space-y-2">
         {!collapsed && (
           <p className="text-xs text-slate-500 whitespace-nowrap">
             Plumbing Supplies Co.
           </p>
         )}
+        <button
+          onClick={handleLogout}
+          title={collapsed ? "Sign out" : undefined}
+          className={`flex items-center w-full py-2 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:bg-slate-700 hover:text-white ${
+            collapsed ? "justify-center px-2" : "gap-3 px-3"
+          }`}
+        >
+          <LogOut className="w-4 h-4 shrink-0" />
+          {!collapsed && <span>Sign out</span>}
+        </button>
       </div>
     </aside>
   );

@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+import AppShell from "@/components/AppShell";
 
 export const metadata: Metadata = {
   title: "PlumbingPro — Business Manager",
@@ -18,15 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-slate-100 text-slate-900 antialiased">
-        <div className="flex min-h-screen">
-          {/* Sidebar navigation on the left */}
-          <Sidebar />
-
-          {/* Main content area on the right */}
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-        </div>
+        {/* AppShell shows the sidebar on app pages and hides it on auth pages */}
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
