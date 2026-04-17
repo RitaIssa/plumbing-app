@@ -37,9 +37,10 @@ export default function Sidebar() {
 
   return (
     <aside
+      // h-full fills the h-screen flex parent; sticky top-0 keeps it in view while main scrolls
       className={`${
         collapsed ? "w-16" : "w-56"
-      } transition-all duration-300 ease-in-out shrink-0 min-h-screen bg-slate-800 text-white flex flex-col`}
+      } transition-all duration-300 ease-in-out shrink-0 h-full sticky top-0 bg-slate-800 text-white flex flex-col`}
     >
       {/* Header row — logo + title left, chevron right (expanded); icon centered (collapsed) */}
       <div

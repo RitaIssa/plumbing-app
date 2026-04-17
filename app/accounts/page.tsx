@@ -45,8 +45,9 @@ export default async function AccountsPage() {
       {/* Accounts table */}
       {accounts.length > 0 && (
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div className="overflow-y-auto max-h-[calc(100vh-220px)]">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
               <tr>
                 <th className="text-left px-6 py-3 font-semibold text-slate-600">Name</th>
                 <th className="text-left px-6 py-3 font-semibold text-slate-600">Email</th>
@@ -89,6 +90,7 @@ export default async function AccountsPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>
