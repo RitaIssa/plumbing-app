@@ -40,21 +40,27 @@ async function createProduct(formData: FormData) {
   redirect("/products");
 }
 
+const inputClass =
+  "w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+const priceInputClass =
+  "w-full border border-slate-300 dark:border-slate-600 rounded-lg pl-7 pr-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
 export default async function NewProductPage() {
   // Load all suppliers for the dropdown selector
   const suppliers = await prisma.supplier.findMany({ orderBy: { name: "asc" } });
 
   return (
     <div className="p-8 max-w-2xl">
-      <Link href="/products" className="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1 mb-6">
+      <Link href="/products" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 mb-6">
         ← Back to Products
       </Link>
 
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Add New Product</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Add New Product</h1>
 
       {/* Show a warning if there are no suppliers yet */}
       {suppliers.length === 0 && (
-        <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-4 py-3 text-sm mb-6">
+        <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-amber-800 dark:text-amber-300 rounded-lg px-4 py-3 text-sm mb-6">
           You need to{" "}
           <Link href="/suppliers/new" className="underline font-medium">
             add a supplier
@@ -63,10 +69,10 @@ export default async function NewProductPage() {
         </div>
       )}
 
-      <form action={createProduct} className="bg-white rounded-xl border border-slate-200 p-6 space-y-5">
+      <form action={createProduct} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 space-y-5">
         {/* Product name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Product Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -75,13 +81,13 @@ export default async function NewProductPage() {
             type="text"
             required
             placeholder="e.g. Copper Elbow 15mm"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="description" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Description <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <textarea
@@ -89,13 +95,13 @@ export default async function NewProductPage() {
             name="description"
             rows={2}
             placeholder="Brief description of the product"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className={`${inputClass} resize-none`}
           />
         </div>
 
         {/* SKU */}
         <div>
-          <label htmlFor="sku" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="sku" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             SKU <span className="text-slate-400 text-xs font-normal">(optional — must be unique)</span>
           </label>
           <input
@@ -103,13 +109,13 @@ export default async function NewProductPage() {
             name="sku"
             type="text"
             placeholder="e.g. CU-ELB-15"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+            className={`${inputClass} font-mono`}
           />
         </div>
 
         {/* Supplier selector */}
         <div>
-          <label htmlFor="supplierId" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="supplierId" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Supplier <span className="text-red-500">*</span>
           </label>
           <select
@@ -117,7 +123,7 @@ export default async function NewProductPage() {
             name="supplierId"
             required
             disabled={suppliers.length === 0}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            className={inputClass}
           >
             <option value="">Select a supplier…</option>
             {suppliers.map((s) => (
@@ -130,10 +136,10 @@ export default async function NewProductPage() {
 
         {/* Pricing — three fields in a row */}
         <div>
-          <p className="text-sm font-medium text-slate-700 mb-3">Pricing <span className="text-red-500">*</span></p>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Pricing <span className="text-red-500">*</span></p>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label htmlFor="costPrice" className="block text-xs text-slate-500 mb-1">
+              <label htmlFor="costPrice" className="block text-xs text-slate-500 dark:text-slate-400 mb-1">
                 Cost Price
               </label>
               <div className="relative">
@@ -146,13 +152,13 @@ export default async function NewProductPage() {
                   min="0"
                   required
                   placeholder="0.00"
-                  className="w-full border border-slate-300 rounded-lg pl-7 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={priceInputClass}
                 />
               </div>
               <p className="text-xs text-slate-400 mt-1">What you pay</p>
             </div>
             <div>
-              <label htmlFor="retailPrice" className="block text-xs text-slate-500 mb-1">
+              <label htmlFor="retailPrice" className="block text-xs text-slate-500 dark:text-slate-400 mb-1">
                 Retail Price
               </label>
               <div className="relative">
@@ -165,13 +171,13 @@ export default async function NewProductPage() {
                   min="0"
                   required
                   placeholder="0.00"
-                  className="w-full border border-slate-300 rounded-lg pl-7 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={priceInputClass}
                 />
               </div>
               <p className="text-xs text-slate-400 mt-1">Public customers</p>
             </div>
             <div>
-              <label htmlFor="tradePrice" className="block text-xs text-slate-500 mb-1">
+              <label htmlFor="tradePrice" className="block text-xs text-slate-500 dark:text-slate-400 mb-1">
                 Trade Price
               </label>
               <div className="relative">
@@ -184,7 +190,7 @@ export default async function NewProductPage() {
                   min="0"
                   required
                   placeholder="0.00"
-                  className="w-full border border-slate-300 rounded-lg pl-7 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={priceInputClass}
                 />
               </div>
               <p className="text-xs text-slate-400 mt-1">Trade accounts</p>
@@ -195,7 +201,7 @@ export default async function NewProductPage() {
         {/* Buttons */}
         <div className="flex items-center gap-3 pt-2">
           <SubmitButton label="Save Product" loadingLabel="Saving…" disabled={suppliers.length === 0} />
-          <Link href="/products" className="text-sm text-slate-500 hover:text-slate-700">
+          <Link href="/products" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300">
             Cancel
           </Link>
         </div>

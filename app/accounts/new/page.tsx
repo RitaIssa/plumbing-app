@@ -32,19 +32,22 @@ async function createAccount(formData: FormData) {
   redirect("/accounts");
 }
 
+const inputClass =
+  "w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
 export default function NewAccountPage() {
   return (
     <div className="p-8 max-w-2xl">
-      <Link href="/accounts" className="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1 mb-6">
+      <Link href="/accounts" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 mb-6">
         ← Back to Accounts
       </Link>
 
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Add New Account</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Add New Account</h1>
 
-      <form action={createAccount} className="bg-white rounded-xl border border-slate-200 p-6 space-y-5">
+      <form action={createAccount} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 space-y-5">
         {/* Account name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -53,25 +56,25 @@ export default function NewAccountPage() {
             type="text"
             required
             placeholder="e.g. John Smith or Smith Plumbing Pty Ltd"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Account type — RETAIL or TRADE */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
             Account Type <span className="text-red-500">*</span>
           </label>
           <div className="flex gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="type" value="RETAIL" defaultChecked className="accent-blue-600" />
-              <span className="text-sm text-slate-700">
+              <span className="text-sm text-slate-700 dark:text-slate-300">
                 <strong>Retail</strong> — public customer, pays retail price
               </span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="radio" name="type" value="TRADE" className="accent-blue-600" />
-              <span className="text-sm text-slate-700">
+              <span className="text-sm text-slate-700 dark:text-slate-300">
                 <strong>Trade</strong> — trade professional, pays trade price
               </span>
             </label>
@@ -80,7 +83,7 @@ export default function NewAccountPage() {
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Email <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <input
@@ -88,13 +91,13 @@ export default function NewAccountPage() {
             name="email"
             type="email"
             placeholder="customer@email.com"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Phone <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <input
@@ -102,13 +105,13 @@ export default function NewAccountPage() {
             name="phone"
             type="tel"
             placeholder="e.g. 0400 000 000"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Address */}
         <div>
-          <label htmlFor="address" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="address" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Address <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <textarea
@@ -116,14 +119,14 @@ export default function NewAccountPage() {
             name="address"
             rows={3}
             placeholder="Delivery / billing address"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className={`${inputClass} resize-none`}
           />
         </div>
 
         {/* Buttons */}
         <div className="flex items-center gap-3 pt-2">
           <SubmitButton label="Save Account" loadingLabel="Saving…" />
-          <Link href="/accounts" className="text-sm text-slate-500 hover:text-slate-700">
+          <Link href="/accounts" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300">
             Cancel
           </Link>
         </div>

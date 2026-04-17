@@ -78,8 +78,8 @@ export default function DeleteButton({ id, entityType, entityName }: Props) {
       {showModal &&
         createPortal(
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
-              <p className="text-gray-800 text-base mb-6">
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 border border-slate-200 dark:border-slate-700">
+              <p className="text-gray-800 dark:text-slate-200 text-base mb-6">
                 Are you sure you want to delete <strong>{entityName}</strong>? This action cannot be undone.
               </p>
 
@@ -87,7 +87,7 @@ export default function DeleteButton({ id, entityType, entityName }: Props) {
                 {/* Cancel button — grey */}
                 <button
                   onClick={handleCancel}
-                  className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+                  className="px-4 py-2 rounded bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors"
                 >
                   Cancel
                 </button>

@@ -4,6 +4,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
+import ThemeProvider from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "PlumbingPro — Business Manager",
@@ -16,10 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-slate-100 text-slate-900 antialiased">
-        {/* AppShell shows the sidebar on app pages and hides it on auth pages */}
-        <AppShell>{children}</AppShell>
+    // suppressHydrationWarning prevents a mismatch when next-themes sets the class on <html>
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 antialiased">
+        <ThemeProvider>
+          {/* AppShell shows the sidebar on app pages and hides it on auth pages */}
+          <AppShell>{children}</AppShell>
+        </ThemeProvider>
       </body>
     </html>
   );

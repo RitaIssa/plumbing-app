@@ -13,17 +13,17 @@ export default async function WelcomePage() {
   const name = user?.user_metadata?.name as string | undefined;
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-lg text-center">
         {/* Icon */}
         <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6">
           <Wrench className="w-8 h-8 text-blue-400" />
         </div>
 
-        <h1 className="text-3xl font-bold text-slate-900 mb-3">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">
           Welcome{name ? `, ${name}` : ""}!
         </h1>
-        <p className="text-slate-500 mb-8 text-base leading-relaxed">
+        <p className="text-slate-500 dark:text-slate-400 mb-8 text-base leading-relaxed">
           Your PlumbingPro account is set up and ready to go. Start by adding your
           suppliers, then build out your product catalogue and customer accounts.
         </p>
@@ -74,9 +74,9 @@ function FeatureCard({
   color: "blue" | "green" | "purple";
 }) {
   const colorMap = {
-    blue: "bg-blue-50 text-blue-600 border-blue-100",
-    green: "bg-green-50 text-green-600 border-green-100",
-    purple: "bg-purple-50 text-purple-600 border-purple-100",
+    blue: "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800",
+    green: "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 border-green-100 dark:border-green-800",
+    purple: "bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-800",
   };
 
   return (

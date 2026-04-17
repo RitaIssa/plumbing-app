@@ -56,7 +56,8 @@ export async function middleware(request: NextRequest) {
   }
 
   // Already logged in and visiting an auth page → send to /dashboard
-  if (user && isPublic(pathname) && !pathname.startsWith("/auth")) {
+  // Exclude /reset-password so a user who just clicked a reset link can actually set their password
+  if (user && isPublic(pathname) && !pathname.startsWith("/auth") && !pathname.startsWith("/reset-password")) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     return NextResponse.redirect(url);

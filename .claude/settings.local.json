@@ -14,7 +14,8 @@
       "Bash(node -e \"const code=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); try { new Function\\(code\\); console.log\\('JS syntax OK'\\); } catch\\(e\\) { console.log\\('JS SYNTAX ERROR:', e.message\\); }\")",
       "Bash(curl -s \"http://localhost:3001/_next/static/css/app/layout.css?v=1776349449702\")",
       "Bash(curl -s http://localhost:3000/_next/static/chunks/app/layout.js)",
-      "Bash(powershell *)"
+      "Bash(powershell *)",
+      "Bash(npm install *)"
     ]
   }
 }

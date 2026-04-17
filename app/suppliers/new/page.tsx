@@ -35,21 +35,24 @@ async function createSupplier(formData: FormData) {
   redirect("/suppliers");
 }
 
+const inputClass =
+  "w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
 export default function NewSupplierPage() {
   return (
     <div className="p-8 max-w-2xl">
       {/* Breadcrumb / back link */}
-      <Link href="/suppliers" className="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1 mb-6">
+      <Link href="/suppliers" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 mb-6">
         ← Back to Suppliers
       </Link>
 
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Add New Supplier</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Add New Supplier</h1>
 
       {/* The form — action points to our server action above */}
-      <form action={createSupplier} className="bg-white rounded-xl border border-slate-200 p-6 space-y-5">
+      <form action={createSupplier} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 space-y-5">
         {/* Supplier name — required */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Supplier Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -58,13 +61,13 @@ export default function NewSupplierPage() {
             type="text"
             required
             placeholder="e.g. ABC Plumbing Supplies"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Email — optional */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Email <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <input
@@ -72,13 +75,13 @@ export default function NewSupplierPage() {
             name="email"
             type="email"
             placeholder="contact@supplier.com"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Phone — optional */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Phone <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <input
@@ -86,13 +89,13 @@ export default function NewSupplierPage() {
             name="phone"
             type="tel"
             placeholder="e.g. 02 9000 0000"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Address — optional */}
         <div>
-          <label htmlFor="address" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="address" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Address <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <textarea
@@ -100,14 +103,14 @@ export default function NewSupplierPage() {
             name="address"
             rows={3}
             placeholder="123 Example St, Sydney NSW 2000"
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className={`${inputClass} resize-none`}
           />
         </div>
 
         {/* Submit button */}
         <div className="flex items-center gap-3 pt-2">
           <SubmitButton label="Save Supplier" loadingLabel="Saving…" />
-          <Link href="/suppliers" className="text-sm text-slate-500 hover:text-slate-700">
+          <Link href="/suppliers" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300">
             Cancel
           </Link>
         </div>

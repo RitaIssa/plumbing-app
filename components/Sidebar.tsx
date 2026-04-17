@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import {
   LayoutDashboard,
   Truck,
@@ -11,10 +11,12 @@ import {
   Wrench,
   ChevronLeft,
   ChevronRight,
-  LogOut,
+  Settings,
+  Sun,
+  Moon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { useTheme } from "next-themes";
 
 const navItems: { label: string; href: string; Icon: LucideIcon }[] = [
   { label: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
@@ -25,15 +27,17 @@ const navItems: { label: string; href: string; Icon: LucideIcon }[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const { theme, setTheme } = useTheme();
+  // Prevent hydration mismatch — only render theme toggle after mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
+  function toggleTheme() {
+    setTheme(theme === "dark" ? "light" : "dark");
   }
+
+  const isSettingsActive = pathname === "/settings" || pathname.startsWith("/settings/");
 
   return (
     <aside
@@ -112,23 +116,49 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer — company name + logout */}
-      <div className="px-3 py-4 border-t border-slate-700 space-y-2">
+      {/* Footer — settings, theme toggle, company name, logout */}
+      <div className="px-3 py-4 border-t border-slate-700 space-y-1">
+        {/* Settings link */}
+        <Link
+          href="/settings"
+          title={collapsed ? "Settings" : undefined}
+          className={`flex items-center w-full py-2 rounded-lg text-sm font-medium transition-colors ${
+            collapsed ? "justify-center px-2" : "gap-3 px-3"
+          } ${
+            isSettingsActive
+              ? "bg-blue-600 text-white"
+              : "text-slate-400 hover:bg-slate-700 hover:text-white"
+          }`}
+        >
+          <Settings className="w-4 h-4 shrink-0" />
+          {!collapsed && <span>Settings</span>}
+        </Link>
+
+        {/* Theme toggle — only renders after mount to avoid hydration mismatch */}
+        {mounted && (
+          <button
+            onClick={toggleTheme}
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className={`flex items-center w-full py-2 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:bg-slate-700 hover:text-white ${
+              collapsed ? "justify-center px-2" : "gap-3 px-3"
+            }`}
+          >
+            {theme === "dark" ? (
+              <Sun className="w-4 h-4 shrink-0" />
+            ) : (
+              <Moon className="w-4 h-4 shrink-0" />
+            )}
+            {!collapsed && (
+              <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
+            )}
+          </button>
+        )}
+
         {!collapsed && (
-          <p className="text-xs text-slate-500 whitespace-nowrap">
+          <p className="text-xs text-slate-500 whitespace-nowrap px-3 pt-1">
             Plumbing Supplies Co.
           </p>
         )}
-        <button
-          onClick={handleLogout}
-          title={collapsed ? "Sign out" : undefined}
-          className={`flex items-center w-full py-2 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:bg-slate-700 hover:text-white ${
-            collapsed ? "justify-center px-2" : "gap-3 px-3"
-          }`}
-        >
-          <LogOut className="w-4 h-4 shrink-0" />
-          {!collapsed && <span>Sign out</span>}
-        </button>
       </div>
     </aside>
   );

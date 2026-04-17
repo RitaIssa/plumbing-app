@@ -25,8 +25,8 @@ export default async function DashboardPage() {
     <div className="p-8">
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-slate-500 mt-1">Welcome back. Here&apos;s your business at a glance.</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+        <p className="text-slate-500 dark:text-slate-400 mt-1">Welcome back. Here&apos;s your business at a glance.</p>
       </div>
 
       {/* Summary stat cards */}
@@ -62,9 +62,9 @@ export default async function DashboardPage() {
             <EmptyRow message="No suppliers yet" />
           ) : (
             recentSuppliers.map((s) => (
-              <div key={s.id} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+              <div key={s.id} className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-slate-800">{s.name}</p>
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{s.name}</p>
                   {s.email && <p className="text-xs text-slate-400">{s.email}</p>}
                 </div>
                 <Link href={`/suppliers/${s.id}/edit`} className="text-xs text-blue-500 hover:underline">
@@ -81,12 +81,12 @@ export default async function DashboardPage() {
             <EmptyRow message="No products yet" />
           ) : (
             recentProducts.map((p) => (
-              <div key={p.id} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+              <div key={p.id} className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-slate-800">{p.name}</p>
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{p.name}</p>
                   <p className="text-xs text-slate-400">{p.supplier.name}</p>
                 </div>
-                <span className="text-xs font-mono text-slate-600">${p.retailPrice.toFixed(2)}</span>
+                <span className="text-xs font-mono text-slate-600 dark:text-slate-400">${p.retailPrice.toFixed(2)}</span>
               </div>
             ))
           )}
@@ -98,16 +98,16 @@ export default async function DashboardPage() {
             <EmptyRow message="No accounts yet" />
           ) : (
             recentAccounts.map((a) => (
-              <div key={a.id} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+              <div key={a.id} className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-slate-800">{a.name}</p>
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{a.name}</p>
                   {a.email && <p className="text-xs text-slate-400">{a.email}</p>}
                 </div>
                 <span
                   className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                     a.type === "TRADE"
-                      ? "bg-orange-100 text-orange-700"
-                      : "bg-slate-100 text-slate-600"
+                      ? "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400"
+                      : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
                   }`}
                 >
                   {a.type}
@@ -137,9 +137,9 @@ function StatCard({
   color: "blue" | "green" | "purple";
 }) {
   const colorMap = {
-    blue: "bg-blue-50 text-blue-600 border-blue-100",
-    green: "bg-green-50 text-green-600 border-green-100",
-    purple: "bg-purple-50 text-purple-600 border-purple-100",
+    blue: "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800",
+    green: "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 border-green-100 dark:border-green-800",
+    purple: "bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-800",
   };
 
   return (
@@ -163,9 +163,9 @@ function RecentSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 p-5">
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-slate-700">{title}</h2>
+        <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">{title}</h2>
         <Link href={href} className="text-xs text-blue-500 hover:underline">
           View all →
         </Link>

@@ -37,6 +37,12 @@ async function updateProduct(id: number, formData: FormData) {
   redirect("/products");
 }
 
+const inputClass =
+  "w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+const priceInputClass =
+  "w-full border border-slate-300 dark:border-slate-600 rounded-lg pl-7 pr-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
 export default async function EditProductPage({
   params,
 }: {
@@ -55,16 +61,16 @@ export default async function EditProductPage({
 
   return (
     <div className="p-8 max-w-2xl">
-      <Link href="/products" className="text-sm text-slate-500 hover:text-slate-700 flex items-center gap-1 mb-6">
+      <Link href="/products" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 mb-6">
         ← Back to Products
       </Link>
 
-      <h1 className="text-2xl font-bold text-slate-900 mb-6">Edit Product</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Edit Product</h1>
 
-      <form action={updateWithId} className="bg-white rounded-xl border border-slate-200 p-6 space-y-5">
+      <form action={updateWithId} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 space-y-5">
         {/* Product name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Product Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -73,13 +79,13 @@ export default async function EditProductPage({
             type="text"
             required
             defaultValue={product.name}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className={inputClass}
           />
         </div>
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="description" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Description <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <textarea
@@ -87,13 +93,13 @@ export default async function EditProductPage({
             name="description"
             rows={2}
             defaultValue={product.description || ""}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className={`${inputClass} resize-none`}
           />
         </div>
 
         {/* SKU */}
         <div>
-          <label htmlFor="sku" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="sku" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             SKU <span className="text-slate-400 text-xs font-normal">(optional)</span>
           </label>
           <input
@@ -101,13 +107,13 @@ export default async function EditProductPage({
             name="sku"
             type="text"
             defaultValue={product.sku || ""}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+            className={`${inputClass} font-mono`}
           />
         </div>
 
         {/* Supplier */}
         <div>
-          <label htmlFor="supplierId" className="block text-sm font-medium text-slate-700 mb-1">
+          <label htmlFor="supplierId" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Supplier <span className="text-red-500">*</span>
           </label>
           <select
@@ -115,7 +121,7 @@ export default async function EditProductPage({
             name="supplierId"
             required
             defaultValue={product.supplierId}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            className={inputClass}
           >
             {suppliers.map((s) => (
               <option key={s.id} value={s.id}>
@@ -127,7 +133,7 @@ export default async function EditProductPage({
 
         {/* Pricing */}
         <div>
-          <p className="text-sm font-medium text-slate-700 mb-3">Pricing</p>
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Pricing</p>
           <div className="grid grid-cols-3 gap-4">
             {[
               { id: "costPrice", label: "Cost Price", hint: "What you pay", value: product.costPrice },
@@ -135,7 +141,7 @@ export default async function EditProductPage({
               { id: "tradePrice", label: "Trade Price", hint: "Trade accounts", value: product.tradePrice },
             ].map((field) => (
               <div key={field.id}>
-                <label htmlFor={field.id} className="block text-xs text-slate-500 mb-1">
+                <label htmlFor={field.id} className="block text-xs text-slate-500 dark:text-slate-400 mb-1">
                   {field.label}
                 </label>
                 <div className="relative">
@@ -148,7 +154,7 @@ export default async function EditProductPage({
                     min="0"
                     required
                     defaultValue={field.value.toFixed(2)}
-                    className="w-full border border-slate-300 rounded-lg pl-7 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={priceInputClass}
                   />
                 </div>
                 <p className="text-xs text-slate-400 mt-1">{field.hint}</p>
@@ -160,7 +166,7 @@ export default async function EditProductPage({
         {/* Buttons */}
         <div className="flex items-center gap-3 pt-2">
           <SubmitButton label="Save Changes" loadingLabel="Saving…" />
-          <Link href="/products" className="text-sm text-slate-500 hover:text-slate-700">
+          <Link href="/products" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300">
             Cancel
           </Link>
         </div>
