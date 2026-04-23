@@ -109,18 +109,17 @@ export default function SettingsPage() {
 
 function GeneralSection({ user }: { user: SupabaseUser | null }) {
   const supabase = useMemo(() => createClient(), []);
-  const [editingField, setEditingField] = useState<"name" | "email" | null>(null);
+  const [editingField, setEditingField] = useState<"name" | null>(null);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tempName, setTempName] = useState("");
-  const [tempEmail, setTempEmail] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
-    field: "name" | "email";
+    field: "name";
   } | null>(null);
 
   useEffect(() => {
@@ -130,11 +129,10 @@ function GeneralSection({ user }: { user: SupabaseUser | null }) {
     }
   }, [user]);
 
-  function startEditing(field: "name" | "email") {
+  function startEditing(field: "name") {
     setEditingField(field);
     setMessage(null);
-    if (field === "name") setTempName(name);
-    if (field === "email") setTempEmail(email);
+    setTempName(name);
   }
 
   function cancelEditing() {
@@ -151,22 +149,6 @@ function GeneralSection({ user }: { user: SupabaseUser | null }) {
       setName(tempName);
       setEditingField(null);
       setMessage({ type: "success", text: "Name updated.", field: "name" });
-    }
-    setLoading(false);
-  }
-
-  async function saveEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.updateUser({ email: tempEmail });
-    if (error) {
-      setMessage({ type: "error", text: error.message, field: "email" });
-    } else {
-      setEditingField(null);
-      setMessage({
-        type: "success",
-        text: "Confirmation link sent to your new address.",
-        field: "email",
-      });
     }
     setLoading(false);
   }
@@ -219,25 +201,14 @@ function GeneralSection({ user }: { user: SupabaseUser | null }) {
           />
         </FieldRow>
 
-        {/* Email row */}
-        <FieldRow
-          label="Email address"
-          value={email}
-          isEditing={editingField === "email"}
-          onEdit={() => startEditing("email")}
-        >
-          <InlineEditForm
-            inputType="email"
-            value={tempEmail}
-            onChange={setTempEmail}
-            onSave={saveEmail}
-            onCancel={cancelEditing}
-            loading={loading}
-            message={message?.field === "email" ? message : null}
-            hint="A confirmation link will be sent to the new address."
-            placeholder="you@example.com"
-          />
-        </FieldRow>
+        {/* Email row — read only */}
+        <div className="flex items-center justify-between px-5 py-4">
+          <div>
+            <FieldLabel>Email address</FieldLabel>
+            <p className="text-sm text-slate-900 dark:text-white mt-0.5">{email || "—"}</p>
+          </div>
+          <VerifiedBadge />
+        </div>
 
         {/* Success toast outside edit form */}
         {message?.type === "success" && editingField === null && (
