@@ -2,20 +2,39 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Wrench } from "lucide-react";
+import { Wrench, Eye, EyeOff, Check, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const inputClass =
+  "w-full border border-slate-300 dark:border-slate-600 rounded-lg pl-3 pr-10 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+const plainInputClass =
   "w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+function checkStrength(password: string) {
+  return {
+    minLength: password.length >= 8,
+    hasUppercase: /[A-Z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+    hasSpecial: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password),
+  };
+}
 
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+
+  const strength = checkStrength(password);
+  const allMet = Object.values(strength).every(Boolean);
+  const passwordsMatch = confirm.length === 0 || password === confirm;
+  const canSubmit = allMet && confirm.length > 0 && password === confirm;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -23,10 +42,6 @@ export default function SignupPage() {
 
     if (password !== confirm) {
       setError("Passwords do not match.");
-      return;
-    }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
       return;
     }
 
@@ -71,10 +86,7 @@ export default function SignupPage() {
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
               We sent a confirmation link to <span className="font-medium text-slate-700 dark:text-slate-300">{email}</span>. Click it to activate your account.
             </p>
-            <Link
-              href="/login"
-              className="text-sm text-blue-500 hover:underline"
-            >
+            <Link href="/login" className="text-sm text-blue-500 hover:underline">
               Back to sign in
             </Link>
           </div>
@@ -113,7 +125,7 @@ export default function SignupPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Jane Smith"
-                className={inputClass}
+                className={plainInputClass}
               />
             </div>
 
@@ -127,36 +139,92 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className={inputClass}
+                className={plainInputClass}
               />
             </div>
 
+            {/* Password field with show/hide toggle */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Password <span className="text-red-500">*</span>
               </label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least 6 characters"
-                className={inputClass}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create a password"
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+
+              {/* Strength requirements checklist — visible once the user starts typing */}
+              {password.length > 0 && (
+                <ul className="mt-2 space-y-1">
+                  {[
+                    { met: strength.minLength, label: "At least 8 characters" },
+                    { met: strength.hasUppercase, label: "At least one uppercase letter" },
+                    { met: strength.hasNumber, label: "At least one number" },
+                    { met: strength.hasSpecial, label: "At least one special character (!@#$%^&*)" },
+                  ].map(({ met, label }) => (
+                    <li key={label} className="flex items-center gap-1.5 text-xs">
+                      {met ? (
+                        <Check className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                      ) : (
+                        <X className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                      )}
+                      <span className={met ? "text-green-600 dark:text-green-400" : "text-slate-500 dark:text-slate-400"}>
+                        {label}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
+            {/* Confirm password field with show/hide toggle */}
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Confirm password <span className="text-red-500">*</span>
               </label>
-              <input
-                type="password"
-                required
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                placeholder="••••••••"
-                className={inputClass}
-              />
+              <div className="relative">
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  required
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  placeholder="••••••••"
+                  className={
+                    !passwordsMatch
+                      ? inputClass.replace(
+                          "border-slate-300 dark:border-slate-600",
+                          "border-red-400 dark:border-red-500"
+                        ).replace("focus:ring-blue-500", "focus:ring-red-400")
+                      : inputClass
+                  }
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                  aria-label={showConfirm ? "Hide password" : "Show password"}
+                >
+                  {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {/* Inline mismatch message — only shown after the user has typed something */}
+              {!passwordsMatch && (
+                <p className="mt-1 text-xs text-red-500 dark:text-red-400">Passwords do not match.</p>
+              )}
             </div>
 
             {error && (
@@ -167,7 +235,7 @@ export default function SignupPage() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !canSubmit}
               className="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Creating account…" : "Create account"}
