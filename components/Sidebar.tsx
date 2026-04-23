@@ -18,6 +18,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
+const STORAGE_KEY = "sidebar-collapsed";
+
 const navItems: { label: string; href: string; Icon: LucideIcon }[] = [
   { label: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
   { label: "Suppliers", href: "/suppliers", Icon: Truck },
@@ -29,9 +31,20 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const { theme, setTheme } = useTheme();
-  // Prevent hydration mismatch — only render theme toggle after mount
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+
+  // Restore collapse state from localStorage after hydration
+  useEffect(() => {
+    setMounted(true);
+    if (localStorage.getItem(STORAGE_KEY) === "true") {
+      setCollapsed(true);
+    }
+  }, []);
+
+  function collapse(value: boolean) {
+    setCollapsed(value);
+    localStorage.setItem(STORAGE_KEY, String(value));
+  }
 
   function toggleTheme() {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -41,12 +54,11 @@ export default function Sidebar() {
 
   return (
     <aside
-      // h-full fills the h-screen flex parent; sticky top-0 keeps it in view while main scrolls
       className={`${
         collapsed ? "w-16" : "w-56"
       } transition-all duration-300 ease-in-out shrink-0 h-full sticky top-0 bg-slate-800 text-white flex flex-col`}
     >
-      {/* Header row — logo + title left, chevron right (expanded); icon centered (collapsed) */}
+      {/* Header */}
       <div
         className={`flex items-center border-b border-slate-700 px-3 py-4 ${
           collapsed ? "justify-center" : "justify-between"
@@ -62,10 +74,9 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* Chevron lives in the header row when expanded */}
         {!collapsed && (
           <button
-            onClick={() => setCollapsed(true)}
+            onClick={() => collapse(true)}
             aria-label="Collapse sidebar"
             className="p-1 rounded-md text-slate-400 hover:bg-slate-700 hover:text-white transition-colors shrink-0"
           >
@@ -74,10 +85,10 @@ export default function Sidebar() {
         )}
       </div>
 
-      {/* Expand button shown just below the logo when collapsed */}
+      {/* Expand button when collapsed */}
       {collapsed && (
         <button
-          onClick={() => setCollapsed(false)}
+          onClick={() => collapse(false)}
           aria-label="Expand sidebar"
           className="flex justify-center py-2 border-b border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"
         >
@@ -85,13 +96,11 @@ export default function Sidebar() {
         </button>
       )}
 
-      {/* Navigation links */}
+      {/* Navigation */}
       <nav className="flex-1 py-4">
         <ul className="space-y-1 px-2">
           {navItems.map(({ label, href, Icon }) => {
-            const isActive =
-              pathname === href || pathname.startsWith(href + "/");
-
+            const isActive = pathname === href || pathname.startsWith(href + "/");
             return (
               <li key={href}>
                 <Link
@@ -106,9 +115,7 @@ export default function Sidebar() {
                   }`}
                 >
                   <Icon className="w-5 h-5 shrink-0" />
-                  {!collapsed && (
-                    <span className="whitespace-nowrap">{label}</span>
-                  )}
+                  {!collapsed && <span className="whitespace-nowrap">{label}</span>}
                 </Link>
               </li>
             );
@@ -116,9 +123,8 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      {/* Footer — settings, theme toggle, company name, logout */}
+      {/* Footer */}
       <div className="px-3 py-4 border-t border-slate-700 space-y-1">
-        {/* Settings link */}
         <Link
           href="/settings"
           title={collapsed ? "Settings" : undefined}
@@ -134,7 +140,6 @@ export default function Sidebar() {
           {!collapsed && <span>Settings</span>}
         </Link>
 
-        {/* Theme toggle — only renders after mount to avoid hydration mismatch */}
         {mounted && (
           <button
             onClick={toggleTheme}
@@ -152,12 +157,6 @@ export default function Sidebar() {
               <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
             )}
           </button>
-        )}
-
-        {!collapsed && (
-          <p className="text-xs text-slate-500 whitespace-nowrap px-3 pt-1">
-            Plumbing Supplies Co.
-          </p>
         )}
       </div>
     </aside>

@@ -1,11 +1,12 @@
 "use client";
 
-// DeleteButton — a client component because it needs onClick interactivity.
-// The confirmation modal is rendered via createPortal directly on document.body,
-// which guarantees it's never clipped or blocked by any ancestor's overflow/z-index.
+// DeleteButton — client component for confirming and executing record deletion.
+// The confirmation modal uses createPortal to avoid overflow/z-index clipping.
+// Errors are shown inside the modal rather than browser alert() dialogs.
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { Trash2 } from "lucide-react";
 
 type EntityType = "supplier" | "product" | "account";
 
@@ -15,7 +16,6 @@ interface Props {
   entityName: string;
 }
 
-// Map entity type to its API URL
 const apiPathMap: Record<EntityType, string> = {
   supplier: "/api/suppliers",
   product: "/api/products",
@@ -24,23 +24,22 @@ const apiPathMap: Record<EntityType, string> = {
 
 export default function DeleteButton({ id, entityType, entityName }: Props) {
   const [loading, setLoading] = useState(false);
-  // Controls whether the confirmation modal is visible
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Called when the user clicks the "Delete" button in the list
   function handleDeleteClick() {
+    setError(null);
     setShowModal(true);
   }
 
-  // Called when the user clicks "Cancel" in the modal
   function handleCancel() {
     setShowModal(false);
+    setError(null);
   }
 
-  // Called when the user clicks the red "Delete" button in the modal
   async function handleConfirm() {
-    setShowModal(false);
     setLoading(true);
+    setError(null);
 
     try {
       const res = await fetch(`${apiPathMap[entityType]}/${id}`, {
@@ -49,14 +48,13 @@ export default function DeleteButton({ id, entityType, entityName }: Props) {
 
       if (!res.ok) {
         const data = await res.json();
-        alert(data.error || "Something went wrong. Please try again.");
-        return;
+        setError(data.error || "Something went wrong. Please try again.");
+        return; // keep modal open to show the error
       }
 
-      // Reload the page so the server re-fetches the latest data from the database
       window.location.reload();
     } catch {
-      alert("Network error. Please check your connection and try again.");
+      setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -64,41 +62,46 @@ export default function DeleteButton({ id, entityType, entityName }: Props) {
 
   return (
     <>
-      {/* Delete trigger button in the list row */}
       <button
         onClick={handleDeleteClick}
         disabled={loading}
-        className="text-red-500 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+        title={`Delete ${entityName}`}
+        className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-slate-400 dark:text-slate-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
+        <Trash2 className="w-3 h-3" />
         {loading ? "Deleting…" : "Delete"}
       </button>
 
-      {/* Modal rendered via portal directly on document.body —
-          this ensures it's never blocked by overflow:hidden or any stacking context */}
       {showModal &&
         createPortal(
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 border border-slate-200 dark:border-slate-700">
-              <p className="text-gray-800 dark:text-slate-200 text-base mb-6">
-                Are you sure you want to delete <strong>{entityName}</strong>? This action cannot be undone.
+              <p className="text-slate-800 dark:text-slate-200 text-base mb-4">
+                Delete <strong>{entityName}</strong>? This action cannot be undone.
               </p>
 
+              {/* Inline error message — replaces alert() */}
+              {error && (
+                <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-md px-3 py-2 mb-4">
+                  {error}
+                </p>
+              )}
+
               <div className="flex justify-end gap-3">
-                {/* Cancel button — grey */}
                 <button
                   onClick={handleCancel}
-                  className="px-4 py-2 rounded bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors"
+                  disabled={loading}
+                  className="px-4 py-2 rounded bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
-
-                {/* Confirm delete button — red */}
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors"
+                  disabled={loading}
+                  className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Delete
+                  {loading ? "Deleting…" : error ? "Try Again" : "Delete"}
                 </button>
               </div>
             </div>
