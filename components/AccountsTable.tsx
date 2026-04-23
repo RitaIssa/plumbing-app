@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Pencil, Users, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Search, X, Pencil, Users, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
 import DeleteButton from "./DeleteButton";
 
 type Account = {
@@ -99,8 +99,16 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search accounts…"
-            className="w-full pl-8 pr-3 py-1.5 text-sm bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-8 pr-8 py-1.5 text-sm bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         {/* Type filter pills */}
@@ -131,7 +139,7 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
 
       <div className="overflow-y-auto max-h-[calc(100vh-280px)]">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
+          <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
             <tr>
               <th className="text-left px-6 py-3">
                 <button
