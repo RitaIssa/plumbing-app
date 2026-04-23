@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Pencil, Package } from "lucide-react";
+import { Search, Pencil, Package, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
 import DeleteButton from "./DeleteButton";
 
 type Product = {
@@ -16,9 +16,35 @@ type Product = {
   supplier: { name: string };
 };
 
+type SortCol = "name" | "supplier" | "costPrice" | "retailPrice" | "tradePrice";
+type SortDir = "asc" | "desc";
+
+function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
+  if (!active)
+    return (
+      <ChevronsUpDown className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 group-hover:text-slate-400 transition-colors" />
+    );
+  return dir === "asc" ? (
+    <ChevronUp className="w-3.5 h-3.5 text-blue-500" />
+  ) : (
+    <ChevronDown className="w-3.5 h-3.5 text-blue-500" />
+  );
+}
+
 export default function ProductsTable({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
+  const [sortCol, setSortCol] = useState<SortCol>("name");
+  const [sortDir, setSortDir] = useState<SortDir>("asc");
   const q = search.toLowerCase();
+
+  function handleSort(col: SortCol) {
+    if (col === sortCol) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortCol(col);
+      setSortDir("asc");
+    }
+  }
 
   const filtered = products.filter(
     (p) =>
@@ -27,6 +53,16 @@ export default function ProductsTable({ products }: { products: Product[] }) {
       p.supplier.name.toLowerCase().includes(q) ||
       (p.description ?? "").toLowerCase().includes(q)
   );
+
+  const sorted = [...filtered].sort((a, b) => {
+    let cmp = 0;
+    if (sortCol === "name") cmp = a.name.localeCompare(b.name);
+    else if (sortCol === "supplier") cmp = a.supplier.name.localeCompare(b.supplier.name);
+    else if (sortCol === "costPrice") cmp = a.costPrice - b.costPrice;
+    else if (sortCol === "retailPrice") cmp = a.retailPrice - b.retailPrice;
+    else if (sortCol === "tradePrice") cmp = a.tradePrice - b.tradePrice;
+    return sortDir === "asc" ? cmp : -cmp;
+  });
 
   if (products.length === 0) {
     return (
@@ -71,24 +107,68 @@ export default function ProductsTable({ products }: { products: Product[] }) {
         <table className="w-full text-sm">
           <thead className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
             <tr>
-              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Product</th>
-              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">SKU</th>
-              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Supplier</th>
-              <th className="text-right px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Cost</th>
-              <th className="text-right px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Retail</th>
-              <th className="text-right px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Trade</th>
-              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Actions</th>
+              <th className="text-left px-6 py-3">
+                <button
+                  onClick={() => handleSort("name")}
+                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+                >
+                  Product
+                  <SortIcon active={sortCol === "name"} dir={sortDir} />
+                </button>
+              </th>
+              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
+                SKU
+              </th>
+              <th className="text-left px-6 py-3">
+                <button
+                  onClick={() => handleSort("supplier")}
+                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+                >
+                  Supplier
+                  <SortIcon active={sortCol === "supplier"} dir={sortDir} />
+                </button>
+              </th>
+              <th className="text-right px-6 py-3">
+                <button
+                  onClick={() => handleSort("costPrice")}
+                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors ml-auto"
+                >
+                  <SortIcon active={sortCol === "costPrice"} dir={sortDir} />
+                  Cost
+                </button>
+              </th>
+              <th className="text-right px-6 py-3">
+                <button
+                  onClick={() => handleSort("retailPrice")}
+                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors ml-auto"
+                >
+                  <SortIcon active={sortCol === "retailPrice"} dir={sortDir} />
+                  Retail
+                </button>
+              </th>
+              <th className="text-right px-6 py-3">
+                <button
+                  onClick={() => handleSort("tradePrice")}
+                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors ml-auto"
+                >
+                  <SortIcon active={sortCol === "tradePrice"} dir={sortDir} />
+                  Trade
+                </button>
+              </th>
+              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-            {filtered.length === 0 ? (
+            {sorted.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-6 py-8 text-center text-sm text-slate-400">
                   No products match &ldquo;{search}&rdquo;
                 </td>
               </tr>
             ) : (
-              filtered.map((product) => (
+              sorted.map((product) => (
                 <tr
                   key={product.id}
                   className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
