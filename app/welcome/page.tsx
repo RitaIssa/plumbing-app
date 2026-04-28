@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { Wrench, LayoutDashboard, Truck, Package, Users } from "lucide-react";
+import { LayoutDashboard, Truck, Package, Users } from "lucide-react";
 
 export default async function WelcomePage() {
   const supabase = await createClient();
@@ -16,15 +16,20 @@ export default async function WelcomePage() {
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-lg text-center">
-        <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <Wrench className="w-8 h-8 text-blue-400" />
-        </div>
+        <svg width="64" height="64" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto mb-6">
+          <rect width="70" height="70" rx="14" fill="#1e3a5f"/>
+          <rect x="18" y="14" width="34" height="9" rx="4" fill="white"/>
+          <rect x="18" y="14" width="9" height="22" rx="4" fill="white"/>
+          <rect x="18" y="27" width="34" height="9" rx="4" fill="white"/>
+          <rect x="43" y="27" width="9" height="22" rx="4" fill="white"/>
+          <rect x="18" y="40" width="34" height="9" rx="4" fill="white"/>
+        </svg>
 
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">
           Welcome{name ? `, ${name}` : ""}!
         </h1>
         <p className="text-slate-500 dark:text-slate-400 mb-8 text-base leading-relaxed">
-          Your PlumbingPro account is set up and ready to go. Start by adding your
+          Your SupplyBase account is set up and ready to go. Start by adding your
           suppliers, then build out your product catalogue and customer accounts.
         </p>
 

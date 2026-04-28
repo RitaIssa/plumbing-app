@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Wrench, Eye, EyeOff, Check, X } from "lucide-react";
+import { Eye, EyeOff, Check, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const inputClass =
@@ -100,11 +100,16 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center">
-            <Wrench className="w-5 h-5 text-blue-400" />
-          </div>
+          <svg width="36" height="36" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+            <rect width="70" height="70" rx="14" fill="#1e3a5f"/>
+            <rect x="18" y="14" width="34" height="9" rx="4" fill="white"/>
+            <rect x="18" y="14" width="9" height="22" rx="4" fill="white"/>
+            <rect x="18" y="27" width="34" height="9" rx="4" fill="white"/>
+            <rect x="43" y="27" width="9" height="22" rx="4" fill="white"/>
+            <rect x="18" y="40" width="34" height="9" rx="4" fill="white"/>
+          </svg>
           <div>
-            <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">PlumbingPro</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">SupplyBase</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-tight">Business Manager</p>
           </div>
         </div>
@@ -112,7 +117,7 @@ export default function SignupPage() {
         {/* Card */}
         <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
           <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-1">Create an account</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Get started with PlumbingPro</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Get started with SupplyBase</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

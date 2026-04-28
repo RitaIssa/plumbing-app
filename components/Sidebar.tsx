@@ -8,7 +8,6 @@ import {
   Truck,
   Package,
   Users,
-  Wrench,
   ChevronLeft,
   ChevronRight,
   Settings,
@@ -65,10 +64,17 @@ export default function Sidebar() {
         }`}
       >
         <div className="flex items-center gap-2 min-w-0">
-          <Wrench className="w-5 h-5 text-blue-400 shrink-0" />
+          <svg width="28" height="28" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+            <rect width="70" height="70" rx="14" fill="#1e3a5f"/>
+            <rect x="18" y="14" width="34" height="9" rx="4" fill="white"/>
+            <rect x="18" y="14" width="9" height="22" rx="4" fill="white"/>
+            <rect x="18" y="27" width="34" height="9" rx="4" fill="white"/>
+            <rect x="43" y="27" width="9" height="22" rx="4" fill="white"/>
+            <rect x="18" y="40" width="34" height="9" rx="4" fill="white"/>
+          </svg>
           {!collapsed && (
             <div>
-              <h1 className="text-sm font-bold tracking-tight">PlumbingPro</h1>
+              <h1 className="text-sm font-bold tracking-tight">SupplyBase</h1>
               <p className="text-xs text-slate-400">Business Manager</p>
             </div>
           )}

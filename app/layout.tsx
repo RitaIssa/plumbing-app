@@ -7,8 +7,11 @@ import AppShell from "@/components/AppShell";
 import ThemeProvider from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "PlumbingPro — Business Manager",
+  title: "SupplyBase — Business Manager",
   description: "Manage suppliers, products, and customer accounts",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Wrench } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const inputClass =
@@ -40,11 +39,16 @@ export default function ForgotPasswordPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center">
-            <Wrench className="w-5 h-5 text-blue-400" />
-          </div>
+          <svg width="36" height="36" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+            <rect width="70" height="70" rx="14" fill="#1e3a5f"/>
+            <rect x="18" y="14" width="34" height="9" rx="4" fill="white"/>
+            <rect x="18" y="14" width="9" height="22" rx="4" fill="white"/>
+            <rect x="18" y="27" width="34" height="9" rx="4" fill="white"/>
+            <rect x="43" y="27" width="9" height="22" rx="4" fill="white"/>
+            <rect x="18" y="40" width="34" height="9" rx="4" fill="white"/>
+          </svg>
           <div>
-            <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">PlumbingPro</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">SupplyBase</p>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-tight">Business Manager</p>
           </div>
         </div>
