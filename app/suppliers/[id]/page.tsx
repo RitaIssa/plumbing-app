@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Globe, Pencil, Package } from "lucide-react";
+import FaviconImage from "@/components/FaviconImage";
 
 export default async function SupplierDetailPage({
   params,
@@ -45,12 +46,22 @@ export default async function SupplierDetailPage({
       {/* Supplier info card */}
       <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
         <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{supplier.name}</h1>
-            <p className="text-sm text-slate-400 mt-1">
-              {supplier.products.length}{" "}
-              {supplier.products.length === 1 ? "product" : "products"}
-            </p>
+          <div className="flex items-center gap-4">
+            {supplier.website && (
+              <FaviconImage
+                website={supplier.website}
+                name={supplier.name}
+                size={64}
+                className="w-12 h-12 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 p-1.5 shrink-0"
+              />
+            )}
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{supplier.name}</h1>
+              <p className="text-sm text-slate-400 mt-1">
+                {supplier.products.length}{" "}
+                {supplier.products.length === 1 ? "product" : "products"}
+              </p>
+            </div>
           </div>
           {supplier.website && (
             <a

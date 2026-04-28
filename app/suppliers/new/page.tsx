@@ -6,7 +6,7 @@ import SupplierForm from "@/app/suppliers/SupplierForm";
 
 export default function NewSupplierPage() {
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-8">
       <Link href="/suppliers" className="text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 mb-6">
         ← Back to Suppliers
       </Link>

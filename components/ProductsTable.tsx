@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, X, Pencil, Package, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Search, X, Pencil, Package, ChevronUp, ChevronDown, ChevronsUpDown, ExternalLink } from "lucide-react";
 import DeleteButton from "./DeleteButton";
 
 type Product = {
@@ -10,6 +10,8 @@ type Product = {
   name: string;
   description: string | null;
   sku: string | null;
+  category: string | null;
+  imageUrl: string | null;
   costPrice: number;
   retailPrice: number;
   tradePrice: number;
@@ -34,9 +36,15 @@ function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
 
 export default function ProductsTable({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [sortCol, setSortCol] = useState<SortCol>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const q = search.toLowerCase();
+
+  // Unique categories present in the full product list
+  const categories = Array.from(
+    new Set(products.map((p) => p.category).filter(Boolean) as string[])
+  ).sort();
 
   function handleSort(col: SortCol) {
     if (col === sortCol) {
@@ -47,13 +55,17 @@ export default function ProductsTable({ products }: { products: Product[] }) {
     }
   }
 
-  const filtered = products.filter(
-    (p) =>
+  const filtered = products.filter((p) => {
+    const matchesSearch =
       p.name.toLowerCase().includes(q) ||
       (p.sku ?? "").toLowerCase().includes(q) ||
       p.supplier.name.toLowerCase().includes(q) ||
-      (p.description ?? "").toLowerCase().includes(q)
-  );
+      (p.description ?? "").toLowerCase().includes(q) ||
+      (p.category ?? "").toLowerCase().includes(q);
+    const matchesCategory =
+      categoryFilter === "all" || p.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
 
   const sorted = [...filtered].sort((a, b) => {
     let cmp = 0;
@@ -64,6 +76,8 @@ export default function ProductsTable({ products }: { products: Product[] }) {
     else if (sortCol === "tradePrice") cmp = a.tradePrice - b.tradePrice;
     return sortDir === "asc" ? cmp : -cmp;
   });
+
+  const isFiltered = search !== "" || categoryFilter !== "all";
 
   if (products.length === 0) {
     return (
@@ -85,9 +99,10 @@ export default function ProductsTable({ products }: { products: Product[] }) {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-      {/* Search bar */}
-      <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex items-center gap-3">
-        <div className="relative flex-1 max-w-sm">
+      {/* Toolbar */}
+      <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center gap-3">
+        {/* Search */}
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
           <input
             type="text"
@@ -105,7 +120,24 @@ export default function ProductsTable({ products }: { products: Product[] }) {
             </button>
           )}
         </div>
-        {search && (
+
+        {/* Category filter */}
+        {categories.length > 0 && (
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="py-1.5 pl-3 pr-8 text-sm bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-md text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="all">All categories</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {isFiltered && (
           <span className="text-xs text-slate-400 shrink-0">
             {filtered.length} of {products.length}
           </span>
@@ -176,7 +208,7 @@ export default function ProductsTable({ products }: { products: Product[] }) {
             {sorted.length === 0 ? (
               <tr>
                 <td colSpan={8} className="px-6 py-8 text-center text-sm text-slate-400">
-                  No products match &ldquo;{search}&rdquo;
+                  No products match your filters
                 </td>
               </tr>
             ) : (
@@ -186,12 +218,31 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                   className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
                   <td className="px-6 py-4">
-                    <p className="font-medium text-slate-800 dark:text-slate-200">{product.name}</p>
-                    {product.description && (
-                      <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">
-                        {product.description}
-                      </p>
-                    )}
+                    <div className="flex items-center gap-3">
+                      {/* Thumbnail */}
+                      {product.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={product.imageUrl}
+                          alt={product.name}
+                          className="w-10 h-10 rounded-md object-cover border border-slate-200 dark:border-slate-600 shrink-0"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        />
+                      ) : null}
+                      <div className="min-w-0">
+                        <p className="font-medium text-slate-800 dark:text-slate-200">{product.name}</p>
+                        {product.description && (
+                          <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">
+                            {product.description}
+                          </p>
+                        )}
+                        {product.category && (
+                          <span className="inline-block mt-1 text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
+                            {product.category}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">
                     {product.sku || "—"}
@@ -225,6 +276,13 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        Details
+                      </Link>
                       <Link
                         href={`/products/${product.id}/edit`}
                         className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"

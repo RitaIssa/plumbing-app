@@ -10,6 +10,7 @@ type Supplier = {
   name: string;
   email: string | null;
   phone: string | null;
+  website: string | null;
   createdAt: Date;
   _count: { products: number };
 };
@@ -163,12 +164,23 @@ export default function SuppliersTable({ suppliers }: { suppliers: Supplier[] })
                   className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
                   <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
-                    <Link
-                      href={`/suppliers/${supplier.id}`}
-                      className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                    >
-                      {supplier.name}
-                    </Link>
+                    <div className="flex items-center gap-2.5">
+                      {supplier.website && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`https://www.google.com/s2/favicons?domain=${supplier.website}&sz=32`}
+                          alt=""
+                          className="w-5 h-5 rounded shrink-0"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                        />
+                      )}
+                      <Link
+                        href={`/suppliers/${supplier.id}`}
+                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      >
+                        {supplier.name}
+                      </Link>
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                     {supplier.email || "—"}

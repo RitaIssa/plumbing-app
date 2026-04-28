@@ -27,13 +27,13 @@ export default function SupplierForm({ action, defaultValues = {}, submitLabel =
 
   return (
     <form action={formAction} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 space-y-5">
-      {/* Inline error alert — shown when the server action returns an error */}
       {state?.error && (
         <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg px-4 py-3 text-sm">
           {state.error}
         </div>
       )}
 
+      {/* Name — full width */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
           Supplier Name <span className="text-red-500">*</span>
@@ -49,34 +49,37 @@ export default function SupplierForm({ action, defaultValues = {}, submitLabel =
         />
       </div>
 
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-          Email <span className="text-slate-400 text-xs font-normal">(optional)</span>
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="contact@supplier.com"
-          defaultValue={defaultValues.email ?? ""}
-          className={inputClass}
-        />
+      {/* Email | Phone — 2 columns */}
+      <div className="grid grid-cols-2 gap-5">
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            Email <span className="text-slate-400 text-xs font-normal">(optional)</span>
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="contact@supplier.com"
+            defaultValue={defaultValues.email ?? ""}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label htmlFor="phone" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            Phone <span className="text-slate-400 text-xs font-normal">(optional)</span>
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="e.g. 02 9000 0000"
+            defaultValue={defaultValues.phone ?? ""}
+            className={inputClass}
+          />
+        </div>
       </div>
 
-      <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-          Phone <span className="text-slate-400 text-xs font-normal">(optional)</span>
-        </label>
-        <input
-          id="phone"
-          name="phone"
-          type="tel"
-          placeholder="e.g. 02 9000 0000"
-          defaultValue={defaultValues.phone ?? ""}
-          className={inputClass}
-        />
-      </div>
-
+      {/* Address — full width */}
       <div>
         <label htmlFor="address" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
           Address <span className="text-slate-400 text-xs font-normal">(optional)</span>
@@ -91,9 +94,10 @@ export default function SupplierForm({ action, defaultValues = {}, submitLabel =
         />
       </div>
 
+      {/* Website — full width */}
       <div>
         <label htmlFor="website" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-          Website <span className="text-slate-400 text-xs font-normal">(optional)</span>
+          Website <span className="text-slate-400 text-xs font-normal">(optional — logo will be fetched automatically)</span>
         </label>
         <input
           id="website"

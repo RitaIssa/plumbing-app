@@ -5,15 +5,28 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getActionError, type ActionState } from "@/lib/action-error";
 
+function optFloat(formData: FormData, key: string): number | null {
+  const raw = (formData.get(key) as string)?.trim();
+  if (!raw) return null;
+  const val = parseFloat(raw);
+  return isNaN(val) ? null : val;
+}
+
 export async function createProduct(prevState: ActionState, formData: FormData): Promise<ActionState> {
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const sku = formData.get("sku") as string;
+  const category = formData.get("category") as string;
+  const imageUrl = formData.get("imageUrl") as string;
   const supplierId = parseInt(formData.get("supplierId") as string, 10);
   const costPrice = parseFloat(formData.get("costPrice") as string);
   const retailPrice = parseFloat(formData.get("retailPrice") as string);
   const tradePrice = parseFloat(formData.get("tradePrice") as string);
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10);
+  const width = optFloat(formData, "width");
+  const height = optFloat(formData, "height");
+  const depth = optFloat(formData, "depth");
+  const weight = optFloat(formData, "weight");
 
   if (!name?.trim()) return { error: "Product name is required" };
   if (isNaN(supplierId)) return { error: "Please select a supplier" };
@@ -30,11 +43,17 @@ export async function createProduct(prevState: ActionState, formData: FormData):
         name: name.trim(),
         description: description?.trim() || null,
         sku: sku?.trim() || null,
+        category: category?.trim() || null,
+        imageUrl: imageUrl?.trim() || null,
         supplierId,
         costPrice,
         retailPrice,
         tradePrice,
         stockQuantity,
+        width,
+        height,
+        depth,
+        weight,
       },
     });
   } catch (e) {
@@ -52,11 +71,17 @@ export async function updateProduct(id: number, prevState: ActionState, formData
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const sku = formData.get("sku") as string;
+  const category = formData.get("category") as string;
+  const imageUrl = formData.get("imageUrl") as string;
   const supplierId = parseInt(formData.get("supplierId") as string, 10);
   const costPrice = parseFloat(formData.get("costPrice") as string);
   const retailPrice = parseFloat(formData.get("retailPrice") as string);
   const tradePrice = parseFloat(formData.get("tradePrice") as string);
   const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10);
+  const width = optFloat(formData, "width");
+  const height = optFloat(formData, "height");
+  const depth = optFloat(formData, "depth");
+  const weight = optFloat(formData, "weight");
 
   if (!name?.trim()) return { error: "Product name is required" };
   if (isNaN(supplierId)) return { error: "Please select a supplier" };
@@ -74,11 +99,17 @@ export async function updateProduct(id: number, prevState: ActionState, formData
         name: name.trim(),
         description: description?.trim() || null,
         sku: sku?.trim() || null,
+        category: category?.trim() || null,
+        imageUrl: imageUrl?.trim() || null,
         supplierId,
         costPrice,
         retailPrice,
         tradePrice,
         stockQuantity,
+        width,
+        height,
+        depth,
+        weight,
       },
     });
   } catch (e) {
