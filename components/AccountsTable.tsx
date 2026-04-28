@@ -117,7 +117,7 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
             <button
               key={t}
               onClick={() => setTypeFilter(t)}
-              className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+              className={`px-2.5 py-1 rounded text-sm font-medium transition-colors ${
                 typeFilter === t
                   ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900"
                   : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
@@ -133,7 +133,7 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
         </div>
 
         {(search || typeFilter !== "ALL") && (
-          <span className="text-xs text-slate-400 shrink-0">{filtered.length} shown</span>
+          <span className="text-sm text-slate-400 shrink-0">{filtered.length} shown</span>
         )}
       </div>
 
@@ -203,7 +203,7 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-block text-xs px-2.5 py-0.5 rounded-full font-medium ${
+                      className={`inline-block text-sm px-2.5 py-0.5 rounded-full font-medium ${
                         account.type === "TRADE"
                           ? "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400"
                           : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"

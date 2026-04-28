@@ -102,7 +102,7 @@ export default function SuppliersTable({ suppliers }: { suppliers: Supplier[] })
           )}
         </div>
         {search && (
-          <span className="text-xs text-slate-400 shrink-0">
+          <span className="text-sm text-slate-400 shrink-0">
             {filtered.length} of {suppliers.length}
           </span>
         )}
@@ -189,7 +189,7 @@ export default function SuppliersTable({ suppliers }: { suppliers: Supplier[] })
                     {supplier.phone || "—"}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs px-2 py-0.5 rounded-full font-medium">
+                    <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm px-2 py-0.5 rounded-full font-medium">
                       {supplier._count.products}{" "}
                       {supplier._count.products === 1 ? "product" : "products"}
                     </span>

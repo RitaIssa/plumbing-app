@@ -138,7 +138,7 @@ export default function ProductsTable({ products }: { products: Product[] }) {
         )}
 
         {isFiltered && (
-          <span className="text-xs text-slate-400 shrink-0">
+          <span className="text-sm text-slate-400 shrink-0">
             {filtered.length} of {products.length}
           </span>
         )}
@@ -196,7 +196,7 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                   Trade
                 </button>
               </th>
-              <th className="text-right px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
+              <th className="text-right px-6 py-3 font-semibold text-slate-600 dark:text-slate-400 min-w-[140px]">
                 Stock
               </th>
               <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
@@ -237,14 +237,14 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                           </p>
                         )}
                         {product.category && (
-                          <span className="inline-block mt-1 text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
+                          <span className="inline-block mt-1 text-sm px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
                             {product.category}
                           </span>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-xs">
+                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400 font-mono text-sm">
                     {product.sku || "—"}
                   </td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
@@ -261,11 +261,11 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                   </td>
                   <td className="px-6 py-4 text-right">
                     {product.stockQuantity === 0 ? (
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+                      <span className="whitespace-nowrap text-sm font-medium px-2.5 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
                         Out of stock
                       </span>
                     ) : product.stockQuantity <= 5 ? (
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">
+                      <span className="whitespace-nowrap text-sm font-medium px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">
                         Low stock
                       </span>
                     ) : (
