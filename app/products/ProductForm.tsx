@@ -21,6 +21,7 @@ type DefaultValues = {
   costPrice?: number;
   retailPrice?: number;
   tradePrice?: number;
+  stockQuantity?: number;
 };
 
 type Props = {
@@ -93,6 +94,25 @@ export default function ProductForm({ action, suppliers, defaultValues = {}, sub
         {errorField === "sku" && errorMessage !== null && (
           <p className="text-red-600 dark:text-red-400 text-xs mt-1">{errorMessage}</p>
         )}
+      </div>
+
+      {/* Stock Quantity */}
+      <div>
+        <label htmlFor="stockQuantity" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          Stock Quantity
+        </label>
+        <input
+          id="stockQuantity"
+          name="stockQuantity"
+          type="number"
+          min="0"
+          step="1"
+          required
+          placeholder="0"
+          defaultValue={defaultValues.stockQuantity ?? 0}
+          className={inputClass}
+        />
+        <p className="text-xs text-slate-400 mt-1">How many units are currently in stock</p>
       </div>
 
       {/* Supplier selector */}

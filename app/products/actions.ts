@@ -13,11 +13,15 @@ export async function createProduct(prevState: ActionState, formData: FormData):
   const costPrice = parseFloat(formData.get("costPrice") as string);
   const retailPrice = parseFloat(formData.get("retailPrice") as string);
   const tradePrice = parseFloat(formData.get("tradePrice") as string);
+  const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10);
 
   if (!name?.trim()) return { error: "Product name is required" };
   if (isNaN(supplierId)) return { error: "Please select a supplier" };
   if (isNaN(costPrice) || isNaN(retailPrice) || isNaN(tradePrice)) {
     return { error: "All prices must be valid numbers" };
+  }
+  if (isNaN(stockQuantity) || stockQuantity < 0) {
+    return { error: "Stock quantity must be 0 or more" };
   }
 
   try {
@@ -30,6 +34,7 @@ export async function createProduct(prevState: ActionState, formData: FormData):
         costPrice,
         retailPrice,
         tradePrice,
+        stockQuantity,
       },
     });
   } catch (e) {
@@ -51,11 +56,15 @@ export async function updateProduct(id: number, prevState: ActionState, formData
   const costPrice = parseFloat(formData.get("costPrice") as string);
   const retailPrice = parseFloat(formData.get("retailPrice") as string);
   const tradePrice = parseFloat(formData.get("tradePrice") as string);
+  const stockQuantity = parseInt(formData.get("stockQuantity") as string, 10);
 
   if (!name?.trim()) return { error: "Product name is required" };
   if (isNaN(supplierId)) return { error: "Please select a supplier" };
   if (isNaN(costPrice) || isNaN(retailPrice) || isNaN(tradePrice)) {
     return { error: "All prices must be valid numbers" };
+  }
+  if (isNaN(stockQuantity) || stockQuantity < 0) {
+    return { error: "Stock quantity must be 0 or more" };
   }
 
   try {
@@ -69,6 +78,7 @@ export async function updateProduct(id: number, prevState: ActionState, formData
         costPrice,
         retailPrice,
         tradePrice,
+        stockQuantity,
       },
     });
   } catch (e) {

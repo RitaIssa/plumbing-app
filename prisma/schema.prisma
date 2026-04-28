@@ -1,57 +1,50 @@
-// This is the Prisma schema file — it defines the shape of our database tables.
-// After making changes here, run: npx prisma generate
-// To push changes to the database, run: npx prisma db push
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")       // connection pooler URL (for normal queries)
-  directUrl = env("DIRECT_URL")         // direct URL (required by Supabase for migrations)
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-// A supplier is a company we buy plumbing products from
 model Supplier {
   id        Int       @id @default(autoincrement())
-  name      String                      // e.g. "ABC Plumbing Supplies"
-  email     String?                     // optional contact email
-  phone     String?                     // optional contact phone
-  address   String?                     // optional address
-  products  Product[]                   // a supplier can have many products
+  name      String
+  email     String?
+  phone     String?
+  address   String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  products  Product[]
 }
 
-// A product is a plumbing item we stock (linked to a supplier)
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String                    // e.g. "Copper Elbow 15mm"
-  description String?                   // optional description
-  sku         String?  @unique          // optional stock-keeping unit code
-  costPrice   Float                     // what we pay the supplier
-  retailPrice Float                     // price for retail (public) customers
-  tradePrice  Float                     // discounted price for trade customers
-  supplier    Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
-  supplierId  Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String?
+  sku           String?  @unique
+  costPrice     Float
+  retailPrice   Float
+  tradePrice    Float
+  stockQuantity Int      @default(0)
+  supplierId    Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  supplier      Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
 }
 
-// An account is a customer — either a regular member of the public (RETAIL) or a trade professional (TRADE)
 model Account {
   id        Int         @id @default(autoincrement())
-  name      String                      // customer/business name
-  email     String?     @unique         // contact email
-  phone     String?                     // contact phone
-  address   String?                     // delivery/billing address
-  type      AccountType @default(RETAIL) // RETAIL or TRADE
+  name      String
+  email     String?     @unique
+  phone     String?
+  address   String?
+  type      AccountType @default(RETAIL)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
 
-// Account type enum — RETAIL customers pay full price, TRADE customers get the trade price
 enum AccountType {
   RETAIL
   TRADE

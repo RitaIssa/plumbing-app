@@ -13,6 +13,7 @@ type Product = {
   costPrice: number;
   retailPrice: number;
   tradePrice: number;
+  stockQuantity: number;
   supplier: { name: string };
 };
 
@@ -163,6 +164,9 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                   Trade
                 </button>
               </th>
+              <th className="text-right px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
+                Stock
+              </th>
               <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
                 Actions
               </th>
@@ -171,7 +175,7 @@ export default function ProductsTable({ products }: { products: Product[] }) {
           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
             {sorted.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-6 py-8 text-center text-sm text-slate-400">
+                <td colSpan={8} className="px-6 py-8 text-center text-sm text-slate-400">
                   No products match &ldquo;{search}&rdquo;
                 </td>
               </tr>
@@ -203,6 +207,21 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                   </td>
                   <td className="px-6 py-4 text-right font-mono font-medium text-orange-600 dark:text-orange-400">
                     ${product.tradePrice.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    {product.stockQuantity === 0 ? (
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
+                        Out of stock
+                      </span>
+                    ) : product.stockQuantity <= 5 ? (
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">
+                        Low stock
+                      </span>
+                    ) : (
+                      <span className="font-mono text-sm text-slate-600 dark:text-slate-400">
+                        {product.stockQuantity}
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">

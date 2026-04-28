@@ -106,7 +106,7 @@ export default function Sidebar() {
                 <Link
                   href={href}
                   title={collapsed ? label : undefined}
-                  className={`flex items-center py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center py-2.5 rounded-lg text-base font-medium transition-colors ${
                     collapsed ? "justify-center px-2" : "gap-3 px-3"
                   } ${
                     isActive
@@ -128,7 +128,7 @@ export default function Sidebar() {
         <Link
           href="/settings"
           title={collapsed ? "Settings" : undefined}
-          className={`flex items-center w-full py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex items-center w-full py-2 rounded-lg text-base font-medium transition-colors ${
             collapsed ? "justify-center px-2" : "gap-3 px-3"
           } ${
             isSettingsActive
@@ -144,7 +144,7 @@ export default function Sidebar() {
           <button
             onClick={toggleTheme}
             title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            className={`flex items-center w-full py-2 rounded-lg text-sm font-medium transition-colors text-slate-400 hover:bg-slate-700 hover:text-white ${
+            className={`flex items-center w-full py-2 rounded-lg text-base font-medium transition-colors text-slate-400 hover:bg-slate-700 hover:text-white ${
               collapsed ? "justify-center px-2" : "gap-3 px-3"
             }`}
           >

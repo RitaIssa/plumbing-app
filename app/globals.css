@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 /* Clean, minimal base styles for the business app */
+html {
+  font-size: 106.25%; /* 17px base — makes all rem-based sizes slightly larger */
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, sans-serif;
