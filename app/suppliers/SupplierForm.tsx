@@ -13,6 +13,7 @@ type DefaultValues = {
   email?: string | null;
   phone?: string | null;
   address?: string | null;
+  website?: string | null;
 };
 
 type Props = {
@@ -87,6 +88,20 @@ export default function SupplierForm({ action, defaultValues = {}, submitLabel =
           placeholder="123 Example St, Sydney NSW 2000"
           defaultValue={defaultValues.address ?? ""}
           className={`${inputClass} resize-none`}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="website" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          Website <span className="text-slate-400 text-xs font-normal">(optional)</span>
+        </label>
+        <input
+          id="website"
+          name="website"
+          type="url"
+          placeholder="https://supplier.com.au"
+          defaultValue={defaultValues.website ?? ""}
+          className={inputClass}
         />
       </div>
 

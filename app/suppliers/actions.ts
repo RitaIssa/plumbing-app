@@ -10,6 +10,7 @@ export async function createSupplier(prevState: ActionState, formData: FormData)
   const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
+  const website = formData.get("website") as string;
 
   if (!name?.trim()) return { error: "Supplier name is required" };
 
@@ -20,6 +21,7 @@ export async function createSupplier(prevState: ActionState, formData: FormData)
         email: email?.trim() || null,
         phone: phone?.trim() || null,
         address: address?.trim() || null,
+        website: website?.trim() || null,
       },
     });
   } catch (e) {
@@ -38,6 +40,7 @@ export async function updateSupplier(id: number, prevState: ActionState, formDat
   const email = formData.get("email") as string;
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
+  const website = formData.get("website") as string;
 
   if (!name?.trim()) return { error: "Supplier name is required" };
 
@@ -49,6 +52,7 @@ export async function updateSupplier(id: number, prevState: ActionState, formDat
         email: email?.trim() || null,
         phone: phone?.trim() || null,
         address: address?.trim() || null,
+        website: website?.trim() || null,
       },
     });
   } catch (e) {

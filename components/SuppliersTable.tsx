@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, X, Pencil, Truck, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Search, X, Pencil, Truck, ChevronUp, ChevronDown, ChevronsUpDown, ExternalLink } from "lucide-react";
 import DeleteButton from "./DeleteButton";
 
 type Supplier = {
@@ -163,7 +163,12 @@ export default function SuppliersTable({ suppliers }: { suppliers: Supplier[] })
                   className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
                   <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
-                    {supplier.name}
+                    <Link
+                      href={`/suppliers/${supplier.id}`}
+                      className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      {supplier.name}
+                    </Link>
                   </td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                     {supplier.email || "—"}
@@ -186,6 +191,13 @@ export default function SuppliersTable({ suppliers }: { suppliers: Supplier[] })
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
+                      <Link
+                        href={`/suppliers/${supplier.id}`}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        Details
+                      </Link>
                       <Link
                         href={`/suppliers/${supplier.id}/edit`}
                         className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
