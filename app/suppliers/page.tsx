@@ -5,9 +5,18 @@ import Link from "next/link";
 import SuppliersTable from "@/components/SuppliersTable";
 
 export default async function SuppliersPage() {
+  // Select only the fields used by SuppliersTable (no address or updatedAt).
   const suppliers = await prisma.supplier.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      website: true,
+      createdAt: true,
+      _count: { select: { products: true } },
+    },
     orderBy: { name: "asc" },
-    include: { _count: { select: { products: true } } },
   });
 
   return (

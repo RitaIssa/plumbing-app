@@ -14,6 +14,7 @@ type DefaultValues = {
   phone?: string | null;
   address?: string | null;
   type?: "RETAIL" | "TRADE";
+  notes?: string | null;
 };
 
 type Props = {
@@ -129,6 +130,21 @@ export default function AccountForm({ action, defaultValues = {}, submitLabel = 
           rows={3}
           placeholder="Delivery / billing address"
           defaultValue={defaultValues.address ?? ""}
+          className={`${inputClass} resize-none`}
+        />
+      </div>
+
+      {/* Internal notes — full width */}
+      <div>
+        <label htmlFor="notes" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+          Internal notes <span className="text-slate-400 text-xs font-normal">(optional)</span>
+        </label>
+        <textarea
+          id="notes"
+          name="notes"
+          rows={3}
+          placeholder="Private notes about this account (not visible to customers)"
+          defaultValue={defaultValues.notes ?? ""}
           className={`${inputClass} resize-none`}
         />
       </div>

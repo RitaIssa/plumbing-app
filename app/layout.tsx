@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
 import ThemeProvider from "@/components/ThemeProvider";
+import NavigationProgress from "@/components/NavigationProgress";
 
 export const metadata: Metadata = {
   title: "SupplyBase — Business Manager",
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 antialiased">
         <ThemeProvider>
+          <NavigationProgress />
           {/* AppShell shows the sidebar on app pages and hides it on auth pages */}
           <AppShell>{children}</AppShell>
         </ThemeProvider>

@@ -36,9 +36,10 @@ model Product {
   depth         Float?
   weight        Float?
   supplierId    Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  supplier      Supplier @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  supplier      Supplier   @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  purchases     Purchase[]
 }
 
 model Account {
@@ -48,8 +49,22 @@ model Account {
   phone     String?
   address   String?
   type      AccountType @default(RETAIL)
+  notes     String?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+  purchases Purchase[]
+}
+
+model Purchase {
+  id        Int      @id @default(autoincrement())
+  accountId Int
+  productId Int
+  quantity  Int
+  date      DateTime @default(now())
+  notes     String?
+  createdAt DateTime @default(now())
+  account   Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 enum AccountType {

@@ -16,17 +16,40 @@ export default async function DashboardPage() {
     prisma.supplier.count(),
     prisma.product.count(),
     prisma.account.count(),
+    // Only fetch the fields needed for margin calculation.
     prisma.product.findMany({
-      include: { supplier: { select: { name: true } } },
+      select: {
+        id: true,
+        name: true,
+        costPrice: true,
+        retailPrice: true,
+        supplier: { select: { name: true } },
+      },
     }),
+    // Only fetch fields shown in the stock alerts panel.
     prisma.product.findMany({
       where: { stockQuantity: { lte: 5 } },
-      include: { supplier: { select: { name: true } } },
+      select: {
+        id: true,
+        name: true,
+        stockQuantity: true,
+        supplier: { select: { name: true } },
+      },
       orderBy: { stockQuantity: "asc" },
       take: 8,
     }),
-    prisma.account.findMany({ orderBy: { createdAt: "desc" }, take: 5 }),
-    prisma.supplier.findMany({ orderBy: { createdAt: "desc" }, take: 5 }),
+    // Only fetch fields rendered in the recent accounts panel.
+    prisma.account.findMany({
+      select: { id: true, name: true, email: true, type: true },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
+    // Only fetch fields rendered in the recent suppliers panel.
+    prisma.supplier.findMany({
+      select: { id: true, name: true, email: true },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
   ]);
 
   // Sort products by retail margin ascending — tightest margins first

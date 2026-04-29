@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, X, Pencil, Users, ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { Search, X, Pencil, Users, ChevronUp, ChevronDown, ChevronsUpDown, ExternalLink } from "lucide-react";
 import DeleteButton from "./DeleteButton";
 
 type Account = {
@@ -193,7 +193,12 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
                   className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
                   <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
-                    {account.name}
+                    <Link
+                      href={`/accounts/${account.id}`}
+                      className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      {account.name}
+                    </Link>
                   </td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                     {account.email || "—"}
@@ -221,6 +226,13 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
+                      <Link
+                        href={`/accounts/${account.id}`}
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        Details
+                      </Link>
                       <Link
                         href={`/accounts/${account.id}/edit`}
                         className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"

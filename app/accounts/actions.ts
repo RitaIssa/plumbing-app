@@ -11,6 +11,7 @@ export async function createAccount(prevState: ActionState, formData: FormData):
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
   const type = formData.get("type") as "RETAIL" | "TRADE";
+  const notes = formData.get("notes") as string;
 
   if (!name?.trim()) return { error: "Account name is required" };
 
@@ -22,6 +23,7 @@ export async function createAccount(prevState: ActionState, formData: FormData):
         phone: phone?.trim() || null,
         address: address?.trim() || null,
         type: type === "TRADE" ? "TRADE" : "RETAIL",
+        notes: notes?.trim() || null,
       },
     });
   } catch (e) {
@@ -41,6 +43,7 @@ export async function updateAccount(id: number, prevState: ActionState, formData
   const phone = formData.get("phone") as string;
   const address = formData.get("address") as string;
   const type = formData.get("type") as "RETAIL" | "TRADE";
+  const notes = formData.get("notes") as string;
 
   if (!name?.trim()) return { error: "Account name is required" };
 
@@ -53,6 +56,7 @@ export async function updateAccount(id: number, prevState: ActionState, formData
         phone: phone?.trim() || null,
         address: address?.trim() || null,
         type: type === "TRADE" ? "TRADE" : "RETAIL",
+        notes: notes?.trim() || null,
       },
     });
   } catch (e) {
@@ -60,6 +64,7 @@ export async function updateAccount(id: number, prevState: ActionState, formData
   }
 
   revalidatePath("/accounts");
+  revalidatePath(`/accounts/${id}`);
   revalidatePath("/dashboard");
   redirect("/accounts");
 }

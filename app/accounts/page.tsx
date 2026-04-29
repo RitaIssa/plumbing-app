@@ -5,7 +5,16 @@ import Link from "next/link";
 import AccountsTable from "@/components/AccountsTable";
 
 export default async function AccountsPage() {
+  // Select only the fields used by AccountsTable (no address, notes, or updatedAt).
   const accounts = await prisma.account.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      type: true,
+      createdAt: true,
+    },
     orderBy: { name: "asc" },
   });
 

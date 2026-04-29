@@ -230,7 +230,12 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                         />
                       ) : null}
                       <div className="min-w-0">
-                        <p className="font-medium text-slate-800 dark:text-slate-200">{product.name}</p>
+                        <Link
+                          href={`/products/${product.id}`}
+                          className="font-medium text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        >
+                          {product.name}
+                        </Link>
                         {product.description && (
                           <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">
                             {product.description}

@@ -111,6 +111,7 @@ export default function Sidebar() {
               <li key={href}>
                 <Link
                   href={href}
+                  prefetch={true}
                   title={collapsed ? label : undefined}
                   className={`flex items-center py-2.5 rounded-lg text-base font-medium transition-colors ${
                     collapsed ? "justify-center px-2" : "gap-3 px-3"
@@ -133,6 +134,7 @@ export default function Sidebar() {
       <div className="px-3 py-4 border-t border-slate-700 space-y-1">
         <Link
           href="/settings"
+          prefetch={true}
           title={collapsed ? "Settings" : undefined}
           className={`flex items-center w-full py-2 rounded-lg text-base font-medium transition-colors ${
             collapsed ? "justify-center px-2" : "gap-3 px-3"

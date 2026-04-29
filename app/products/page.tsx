@@ -5,9 +5,22 @@ import Link from "next/link";
 import ProductsTable from "@/components/ProductsTable";
 
 export default async function ProductsPage() {
+  // Select only the fields used by ProductsTable (no dimensions or updatedAt).
   const products = await prisma.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      sku: true,
+      category: true,
+      imageUrl: true,
+      costPrice: true,
+      retailPrice: true,
+      tradePrice: true,
+      stockQuantity: true,
+      supplier: { select: { name: true } },
+    },
     orderBy: { name: "asc" },
-    include: { supplier: { select: { name: true } } },
   });
 
   return (
