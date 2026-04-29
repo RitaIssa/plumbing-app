@@ -66,6 +66,24 @@ export async function createProduct(prevState: ActionState, formData: FormData):
   redirect("/products");
 }
 
+// Adds stock to a product without replacing it — called from the RestockModal.
+export async function restockProduct(id: number, addQty: number): Promise<ActionState> {
+  if (!Number.isInteger(addQty) || addQty < 1) {
+    return { error: "Please enter a valid quantity (minimum 1)." };
+  }
+  try {
+    await prisma.product.update({
+      where: { id },
+      data: { stockQuantity: { increment: addQty } },
+    });
+  } catch (e) {
+    return getActionError(e);
+  }
+  revalidatePath("/products");
+  revalidatePath("/dashboard");
+  return null;
+}
+
 // id is bound via .bind(null, id) in the page component
 export async function updateProduct(id: number, prevState: ActionState, formData: FormData): Promise<ActionState> {
   const name = formData.get("name") as string;

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, X, Pencil, Users, ChevronUp, ChevronDown, ChevronsUpDown, ExternalLink } from "lucide-react";
 import DeleteButton from "./DeleteButton";
+import TablePagination from "./TablePagination";
 
 type Account = {
   id: number;
@@ -23,14 +24,10 @@ const TYPE_ORDER = { TRADE: 0, RETAIL: 1 };
 
 function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
   if (!active)
-    return (
-      <ChevronsUpDown className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 group-hover:text-slate-400 transition-colors" />
-    );
-  return dir === "asc" ? (
-    <ChevronUp className="w-3.5 h-3.5 text-blue-500" />
-  ) : (
-    <ChevronDown className="w-3.5 h-3.5 text-blue-500" />
-  );
+    return <ChevronsUpDown className="w-3.5 h-3.5 text-slate-300 dark:text-slate-600 group-hover:text-slate-400 transition-colors" />;
+  return dir === "asc"
+    ? <ChevronUp className="w-3.5 h-3.5 text-blue-500" />
+    : <ChevronDown className="w-3.5 h-3.5 text-blue-500" />;
 }
 
 export default function AccountsTable({ accounts }: { accounts: Account[] }) {
@@ -38,6 +35,9 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("ALL");
   const [sortCol, setSortCol] = useState<SortCol>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
   const q = search.toLowerCase();
 
   function handleSort(col: SortCol) {
@@ -47,6 +47,7 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
       setSortCol(col);
       setSortDir("asc");
     }
+    setPage(1);
   }
 
   const retailCount = accounts.filter((a) => a.type === "RETAIL").length;
@@ -69,6 +70,8 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
       cmp = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     return sortDir === "asc" ? cmp : -cmp;
   });
+
+  const paginated = sorted.slice((page - 1) * pageSize, page * pageSize);
 
   if (accounts.length === 0) {
     return (
@@ -97,13 +100,13 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             placeholder="Search accounts…"
             className="w-full pl-8 pr-8 py-1.5 text-sm bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           {search && (
             <button
-              onClick={() => setSearch("")}
+              onClick={() => { setSearch(""); setPage(1); }}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
             >
               <X className="w-3.5 h-3.5" />
@@ -111,148 +114,132 @@ export default function AccountsTable({ accounts }: { accounts: Account[] }) {
           )}
         </div>
 
-        {/* Type filter pills */}
+        {/* Type filter pills — clicking an active pill deselects it (shows all) */}
         <div className="flex items-center gap-1">
-          {(["ALL", "RETAIL", "TRADE"] as TypeFilter[]).map((t) => (
+          {(["RETAIL", "TRADE"] as Exclude<TypeFilter, "ALL">[]).map((t) => (
             <button
               key={t}
-              onClick={() => setTypeFilter(t)}
+              onClick={() => { setTypeFilter(typeFilter === t ? "ALL" : t); setPage(1); }}
               className={`px-2.5 py-1 rounded text-sm font-medium transition-colors ${
                 typeFilter === t
                   ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900"
                   : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
               }`}
             >
-              {t === "ALL"
-                ? `All (${accounts.length})`
-                : t === "RETAIL"
-                ? `Retail (${retailCount})`
-                : `Trade (${tradeCount})`}
+              {t === "RETAIL" ? `Retail (${retailCount})` : `Trade (${tradeCount})`}
             </button>
           ))}
         </div>
-
-        {(search || typeFilter !== "ALL") && (
-          <span className="text-sm text-slate-400 shrink-0">{filtered.length} shown</span>
-        )}
       </div>
 
-      <div className="overflow-y-auto max-h-[calc(100vh-280px)]">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10">
+      <table className="w-full text-sm">
+        <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+          <tr>
+            <th className="text-left px-6 py-3">
+              <button
+                onClick={() => handleSort("name")}
+                className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+              >
+                Name
+                <SortIcon active={sortCol === "name"} dir={sortDir} />
+              </button>
+            </th>
+            <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Email</th>
+            <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Phone</th>
+            <th className="text-left px-6 py-3">
+              <button
+                onClick={() => handleSort("type")}
+                className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+              >
+                Type
+                <SortIcon active={sortCol === "type"} dir={sortDir} />
+              </button>
+            </th>
+            <th className="text-left px-6 py-3">
+              <button
+                onClick={() => handleSort("createdAt")}
+                className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+              >
+                Created
+                <SortIcon active={sortCol === "createdAt"} dir={sortDir} />
+              </button>
+            </th>
+            <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">Actions</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+          {paginated.length === 0 ? (
             <tr>
-              <th className="text-left px-6 py-3">
-                <button
-                  onClick={() => handleSort("name")}
-                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
-                >
-                  Name
-                  <SortIcon active={sortCol === "name"} dir={sortDir} />
-                </button>
-              </th>
-              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
-                Email
-              </th>
-              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
-                Phone
-              </th>
-              <th className="text-left px-6 py-3">
-                <button
-                  onClick={() => handleSort("type")}
-                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
-                >
-                  Type
-                  <SortIcon active={sortCol === "type"} dir={sortDir} />
-                </button>
-              </th>
-              <th className="text-left px-6 py-3">
-                <button
-                  onClick={() => handleSort("createdAt")}
-                  className="group flex items-center gap-1 font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
-                >
-                  Created
-                  <SortIcon active={sortCol === "createdAt"} dir={sortDir} />
-                </button>
-              </th>
-              <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
-                Actions
-              </th>
+              <td colSpan={6} className="px-6 py-10 text-center text-sm text-slate-400">
+                No accounts match your filter
+              </td>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-            {sorted.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-sm text-slate-400">
-                  No accounts match your filter
+          ) : (
+            paginated.map((account) => (
+              <tr
+                key={account.id}
+                className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+              >
+                <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
+                  <Link
+                    href={`/accounts/${account.id}`}
+                    className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
+                    {account.name}
+                  </Link>
                 </td>
-              </tr>
-            ) : (
-              sorted.map((account) => (
-                <tr
-                  key={account.id}
-                  className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
-                >
-                  <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
+                <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{account.email || "—"}</td>
+                <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{account.phone || "—"}</td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`inline-block text-sm px-2.5 py-0.5 rounded-full font-medium ${
+                      account.type === "TRADE"
+                        ? "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400"
+                        : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                    }`}
+                  >
+                    {account.type === "TRADE" ? "Trade" : "Retail"}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
+                  {new Date(account.createdAt).toLocaleDateString("en-AU", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-2">
                     <Link
                       href={`/accounts/${account.id}`}
-                      className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                     >
-                      {account.name}
+                      <ExternalLink className="w-3 h-3" />
+                      Details
                     </Link>
-                  </td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                    {account.email || "—"}
-                  </td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                    {account.phone || "—"}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`inline-block text-sm px-2.5 py-0.5 rounded-full font-medium ${
-                        account.type === "TRADE"
-                          ? "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400"
-                          : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
-                      }`}
+                    <Link
+                      href={`/accounts/${account.id}/edit`}
+                      className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                     >
-                      {account.type === "TRADE" ? "Trade" : "Retail"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                    {new Date(account.createdAt).toLocaleDateString("en-AU", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/accounts/${account.id}`}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                        Details
-                      </Link>
-                      <Link
-                        href={`/accounts/${account.id}/edit`}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-                      >
-                        <Pencil className="w-3 h-3" />
-                        Edit
-                      </Link>
-                      <DeleteButton
-                        id={account.id}
-                        entityType="account"
-                        entityName={account.name}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+                      <Pencil className="w-3 h-3" />
+                      Edit
+                    </Link>
+                    <DeleteButton id={account.id} entityType="account" entityName={account.name} />
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <TablePagination
+        total={sorted.length}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={setPage}
+        onPageSizeChange={(s) => { setPageSize(s); setPage(1); }}
+      />
     </div>
   );
 }
