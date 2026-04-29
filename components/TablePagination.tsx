@@ -31,10 +31,10 @@ export default function TablePagination({ total, page, pageSize, onPageChange, o
   const pageNumbers = Array.from({ length: Math.min(5, totalPages) }, (_, i) => startPage + i);
 
   const btnBase =
-    "p-1.5 rounded text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors";
+    "p-1.5 rounded text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors";
 
   return (
-    <div className="px-4 py-3 border-t border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3">
+    <div className="px-4 py-3 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
       {/* Count info */}
       <p className="text-sm text-slate-500 dark:text-slate-400 shrink-0">
         {total === 0
@@ -62,7 +62,7 @@ export default function TablePagination({ total, page, pageSize, onPageChange, o
                 className={`min-w-[2rem] h-8 px-2 rounded text-sm font-medium transition-colors ${
                   n === page
                     ? "bg-blue-600 text-white"
-                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
+                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                 }`}
               >
                 {n}
@@ -87,7 +87,7 @@ export default function TablePagination({ total, page, pageSize, onPageChange, o
             onPageSizeChange(parseInt(e.target.value, 10));
             onPageChange(1);
           }}
-          className="text-sm bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-md px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-md px-2 py-1.5 text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           {PAGE_SIZES.map((s) => (
             <option key={s} value={s}>

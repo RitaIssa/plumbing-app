@@ -2,12 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Clean, minimal base styles for the business app */
 html {
-  font-size: 106.25%; /* 17px base — makes all rem-based sizes slightly larger */
+  font-size: 100%;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, sans-serif;
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Use loaded mono font for all monospace contexts */
+.font-mono, code, kbd, pre {
+  font-family: var(--font-mono), ui-monospace, "Cascadia Code", monospace;
 }

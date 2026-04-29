@@ -6,7 +6,7 @@ import SubmitButton from "@/components/SubmitButton";
 import type { ActionState } from "@/lib/action-error";
 
 const inputClass =
-  "w-full border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+  "w-full border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
 
 type DefaultValues = {
   name?: string;
@@ -30,7 +30,7 @@ export default function AccountForm({ action, defaultValues = {}, submitLabel = 
   const errorField   = state?.field  ?? null;
 
   return (
-    <form action={formAction} className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 space-y-5">
+    <form action={formAction} className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6 space-y-5">
       {errorMessage !== null && errorField === null && (
         <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-400 rounded-lg px-4 py-3 text-sm">
           {errorMessage}

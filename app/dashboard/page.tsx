@@ -81,7 +81,7 @@ export default async function DashboardPage() {
           <Link
             key={label}
             href={href}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-300 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-600 dark:text-slate-300 hover:border-blue-400 dark:hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
           >
             <span className="font-medium">{label}</span>
             <span className="font-semibold text-slate-800 dark:text-white">·</span>
@@ -93,7 +93,7 @@ export default async function DashboardPage() {
       {/* Panels grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Lowest-margin products */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-base font-semibold text-slate-700 dark:text-slate-300">
@@ -128,7 +128,7 @@ export default async function DashboardPage() {
                           ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
                           : p.marginPct < 25
                           ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"
-                          : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300"
                       }`}
                     >
                       {p.marginPct}%
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Stock alerts */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-base font-semibold text-slate-700 dark:text-slate-300">
@@ -161,7 +161,7 @@ export default async function DashboardPage() {
               {stockAlertProducts.map((p) => (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between gap-3 py-1.5 border-b border-slate-100 dark:border-slate-700 last:border-0"
+                  className="flex items-center justify-between gap-3 py-1.5 border-b border-slate-100 dark:border-slate-800 last:border-0"
                 >
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
@@ -192,7 +192,7 @@ export default async function DashboardPage() {
             recentAccounts.map((a) => (
               <div
                 key={a.id}
-                className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0"
+                className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0"
               >
                 <div className="min-w-0 mr-3">
                   <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
@@ -201,10 +201,10 @@ export default async function DashboardPage() {
                   {a.email && <p className="text-sm text-slate-400 truncate">{a.email}</p>}
                 </div>
                 <span
-                  className={`text-sm px-2 py-0.5 rounded-full font-medium shrink-0 ${
+                  className={`text-xs px-2 py-0.5 rounded font-medium shrink-0 ${
                     a.type === "TRADE"
-                      ? "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400"
-                      : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                      ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
                   }`}
                 >
                   {a.type === "TRADE" ? "Trade" : "Retail"}
@@ -222,7 +222,7 @@ export default async function DashboardPage() {
             recentSuppliers.map((s) => (
               <div
                 key={s.id}
-                className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0"
+                className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0"
               >
                 <div className="min-w-0 mr-3">
                   <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
@@ -257,7 +257,7 @@ function RecentSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+    <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-base font-semibold text-slate-700 dark:text-slate-300">{title}</h2>

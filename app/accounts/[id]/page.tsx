@@ -56,7 +56,7 @@ export default async function AccountDetailPage({
         </Link>
         <Link
           href={`/accounts/${id}/edit`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
         >
           <Pencil className="w-3.5 h-3.5" />
           Edit Account
@@ -64,14 +64,14 @@ export default async function AccountDetailPage({
       </div>
 
       {/* Account info card */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6 mb-6">
         <div className="flex items-start gap-3 flex-wrap mb-1">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{account.name}</h1>
           <span
-            className={`mt-1 inline-block text-sm px-2.5 py-0.5 rounded-full font-medium shrink-0 ${
+            className={`mt-1 inline-block text-xs px-2 py-0.5 rounded font-medium shrink-0 ${
               account.type === "TRADE"
-                ? "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400"
-                : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
+                : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
             }`}
           >
             {account.type === "TRADE" ? "Trade" : "Retail"}
@@ -88,7 +88,7 @@ export default async function AccountDetailPage({
 
         {/* Contact details */}
         {(account.email || account.phone || account.address) && (
-          <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="mt-5 pt-5 border-t border-slate-100 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-4">
             {account.email && (
               <div className="flex items-start gap-2">
                 <Mail className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
@@ -134,7 +134,7 @@ export default async function AccountDetailPage({
 
       {/* Notes card — only shown if notes exist */}
       {account.notes && (
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-6 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <FileText className="w-4 h-4 text-slate-400" />
             <h2 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
@@ -149,19 +149,19 @@ export default async function AccountDetailPage({
 
       {/* Summary stats */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5">
           <p className="text-xs text-slate-400 mb-1">Total Purchases</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">{totalPurchases}</p>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 p-5">
           <p className="text-xs text-slate-400 mb-1">Total Spent</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">${totalSpent.toFixed(2)}</p>
         </div>
       </div>
 
       {/* Purchase history */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <h2 className="text-base font-semibold text-slate-700 dark:text-slate-300">Purchase History</h2>
           <AddPurchaseModal
             accountId={id}
@@ -181,7 +181,7 @@ export default async function AccountDetailPage({
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+              <thead className="bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th className="text-left px-6 py-3 font-semibold text-slate-600 dark:text-slate-400">
                     Date
@@ -203,7 +203,7 @@ export default async function AccountDetailPage({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {account.purchases.map((purchase) => {
                   const unitPrice =
                     account.type === "TRADE"
@@ -213,7 +213,7 @@ export default async function AccountDetailPage({
                   return (
                     <tr
                       key={purchase.id}
-                      className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+                      className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
                     >
                       <td className="px-6 py-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">
                         {new Date(purchase.date).toLocaleDateString("en-AU", {

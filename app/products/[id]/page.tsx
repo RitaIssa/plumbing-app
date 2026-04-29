@@ -33,14 +33,14 @@ export default async function ProductDetailPage({
         </Link>
         <Link
           href={`/products/${id}/edit`}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
         >
           <Pencil className="w-3.5 h-3.5" />
           Edit Product
         </Link>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
         <div className="flex flex-col sm:flex-row gap-0">
           {/* Image panel */}
           {product.imageUrl ? (
@@ -51,7 +51,7 @@ export default async function ProductDetailPage({
               className="w-full sm:w-64 h-48 sm:h-auto object-cover shrink-0"
             />
           ) : (
-            <div className="w-full sm:w-64 h-48 sm:h-auto flex items-center justify-center bg-slate-50 dark:bg-slate-900/40 shrink-0">
+            <div className="w-full sm:w-64 h-48 sm:h-auto flex items-center justify-center bg-slate-50 dark:bg-slate-800/40 shrink-0">
               <Package className="w-12 h-12 text-slate-200 dark:text-slate-700" />
             </div>
           )}
@@ -63,7 +63,7 @@ export default async function ProductDetailPage({
                 {product.name}
               </h1>
               {product.category && (
-                <span className="mt-1 text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-medium shrink-0">
+                <span className="mt-1 text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 font-medium shrink-0">
                   {product.category}
                 </span>
               )}
@@ -90,7 +90,7 @@ export default async function ProductDetailPage({
         </div>
 
         {/* Prices + stock */}
-        <div className="border-t border-slate-100 dark:border-slate-700 px-6 py-5 grid grid-cols-2 sm:grid-cols-4 gap-5">
+        <div className="border-t border-slate-100 dark:border-slate-800 px-6 py-5 grid grid-cols-2 sm:grid-cols-4 gap-5">
           <div>
             <p className="text-xs text-slate-400 mb-1">Cost Price</p>
             <p className="text-lg font-semibold font-mono text-slate-700 dark:text-slate-300">
@@ -129,7 +129,7 @@ export default async function ProductDetailPage({
 
         {/* Dimensions */}
         {hasDimensions && (
-          <div className="border-t border-slate-100 dark:border-slate-700 px-6 py-5">
+          <div className="border-t border-slate-100 dark:border-slate-800 px-6 py-5">
             <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-3">Dimensions</p>
             <div className="flex flex-wrap gap-6">
               {product.width && (
